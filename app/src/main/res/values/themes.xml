@@ -1,0 +1,28 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.KrishiYog" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    </style>
+
+    <!-- Splash Screen Theme -->
+    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@drawable/ic_splash</item>
+    </style>
+
+    <style name="Theme.KrishiYog" parent="Base.Theme.KrishiYog" />
+
+    <style name="fab_rounded">
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="CustomActiveIndicator">
+        <!-- Customize the active indicator here -->
+        <item name="android:backgroundTint">@color/secondary</item>
+        <item name="android:height">4dp</item>
+        <item name="android:width">50dp</item>
+        <!-- You can also use custom drawables if needed -->
+        <!-- <item name="android:background">@drawable/custom_active_indicator</item> -->
+    </style>
+
+</resources>

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "670830827039",
+    "project_id": "krishiyog-ccaf0",
+    "storage_bucket": "krishiyog-ccaf0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:670830827039:android:245e40ebcf27bddccde72a",
+        "android_client_info": {
+          "package_name": "com.example.krishiyog"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_eiMD17Ct52-2_3JA1VAzDJ4Qyl6-ktA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
