@@ -6,4 +6,5 @@
     <color name="secondary">#D4FADE</color>
     <color name="primaryBlack">#3F414E</color>
     <color name="secondaryBlack">#A1A4B2</color>
+    <color name="tertiaryBlack">#505050</color>
 </resources>

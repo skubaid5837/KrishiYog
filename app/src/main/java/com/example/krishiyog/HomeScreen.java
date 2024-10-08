@@ -44,7 +44,7 @@ public class HomeScreen extends AppCompatActivity {
 
         //Set default Fragment.
         if (savedInstanceState == null) {
-            loadFragment(new HomeFragment()); // Load default fragment
+            loadFragment(new HomeFragment(), true); // Load default fragment
         }
 
         binding.navbar.setOnItemSelectedListener(item -> {
@@ -55,12 +55,12 @@ public class HomeScreen extends AppCompatActivity {
 
             if (itemId == R.id.nav_home) {
                 binding.navbar.getMenu().findItem(R.id.nav_home).setIcon(R.drawable.ic_home_fill);
-                loadFragment(new HomeFragment());
+                loadFragment(new HomeFragment(), true);
                 return true;
             }
             else if (itemId == R.id.nav_shop) {
                 binding.navbar.getMenu().findItem(R.id.nav_shop).setIcon(R.drawable.ic_shop_filled);
-                loadFragment(new ShopFragment());
+                loadFragment(new ShopFragment(), true);
                 return true;
             }
             else if (itemId == R.id.nav_scan) {
@@ -69,12 +69,12 @@ public class HomeScreen extends AppCompatActivity {
             }
             else if (itemId == R.id.nav_community) {
                 binding.navbar.getMenu().findItem(R.id.nav_community).setIcon(R.drawable.ic_community_filled);
-                loadFragment(new CommunityFragment());
+                loadFragment(new CommunityFragment(), true);
                 return true;
             }
             else if (itemId == R.id.nav_profile) {
                 binding.navbar.getMenu().findItem(R.id.nav_profile).setIcon(R.drawable.ic_profile_filled);
-                loadFragment(new ProfileFragment());
+                loadFragment(new ProfileFragment(), true);
                 return true;
             }
             else {
@@ -92,10 +92,35 @@ public class HomeScreen extends AppCompatActivity {
         binding.navbar.getMenu().findItem(R.id.nav_profile).setIcon(R.drawable.ic_profile);
     }
 
-    private void loadFragment(Fragment fragment) {
+    private void loadFragment(Fragment fragment, boolean showNavBar) {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frame1, fragment);
         fragmentTransaction.commit();
+
+        // Show or hide the BottomNavigationView based on the showNavBar flag
+        if (showNavBar) {
+            binding.navbar.setVisibility(BottomNavigationView.VISIBLE);
+        } else {
+            binding.navbar.setVisibility(BottomNavigationView.GONE);
+        }
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Get the current fragment
+        Fragment currentFragment = fragmentManager.findFragmentById(R.id.frame1);
+
+        // Check if the current fragment is ShopFragment
+        if (currentFragment instanceof ShopFragment) {
+            // Replace ShopFragment with HomeFragment
+            loadFragment(new HomeFragment(), true);
+            // Update the BottomNavigationView to select the Home item
+            binding.navbar.setSelectedItemId(R.id.nav_home);
+        } else {
+            // If not ShopFragment, use default back press behavior
+            super.onBackPressed();
+        }
     }
 
 }

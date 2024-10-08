@@ -40,6 +40,13 @@ public class LoginScreen extends AppCompatActivity {
 
         binding.loginBtn.setOnClickListener(view -> login());
 
+        binding.signUpBtn.setOnClickListener(view -> signUp());
+
+    }
+
+    private void signUp() {
+        Intent intent = new Intent(this, SignupScreen.class);
+        startActivity(intent);
     }
 
     private void login() {
