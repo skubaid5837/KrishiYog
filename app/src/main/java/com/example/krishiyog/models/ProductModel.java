@@ -1,24 +1,44 @@
 package com.example.krishiyog.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
+import java.util.List;
+
 public class ProductModel {
-    int image;
+    List<String> imageUrls;
     String productName;
     String productPrice;
-    String productRating;
+    int productRating;
+    String productDescription;
+    String productCategory;
+    String productQuantity;
+    String productId;
+    String sellerId;
 
-    public ProductModel(int image, String productName, String productPrice, String productRating) {
-        this.image = image;
+    public ProductModel(List<String> imageUrls, String productName, String productPrice, int productRating, String productDescription, String productCategory, String productQuantity, String productId, String sellerId) {
+        this.imageUrls = imageUrls;
         this.productName = productName;
         this.productPrice = productPrice;
         this.productRating = productRating;
+        this.productDescription = productDescription;
+        this.productCategory = productCategory;
+        this.productQuantity = productQuantity;
+        this.productId = productId;
+        this.sellerId = sellerId;
     }
 
-    public int getImage() {
-        return image;
+    public ProductModel() {
     }
 
-    public void setImage(int image) {
-        this.image = image;
+    public List<String> getImageUrls() {
+        return imageUrls;
+    }
+
+    public void setImageUrls(List<String> imageUrls) {
+        this.imageUrls = imageUrls;
     }
 
     public String getProductName() {
@@ -37,11 +57,51 @@ public class ProductModel {
         this.productPrice = productPrice;
     }
 
-    public String getProductRating() {
+    public int getProductRating() {
         return productRating;
     }
 
-    public void setProductRating(String productRating) {
+    public void setProductRating(int productRating) {
         this.productRating = productRating;
+    }
+
+    public String getProductDescription() {
+        return productDescription;
+    }
+
+    public void setProductDescription(String productDescription) {
+        this.productDescription = productDescription;
+    }
+
+    public String getProductCategory() {
+        return productCategory;
+    }
+
+    public void setProductCategory(String productCategory) {
+        this.productCategory = productCategory;
+    }
+
+    public String getProductQuantity() {
+        return productQuantity;
+    }
+
+    public void setProductQuantity(String productQuantity) {
+        this.productQuantity = productQuantity;
+    }
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
+
+    public String getSellerId() {
+        return sellerId;
+    }
+
+    public void setSellerId(String sellerId) {
+        this.sellerId = sellerId;
     }
 }

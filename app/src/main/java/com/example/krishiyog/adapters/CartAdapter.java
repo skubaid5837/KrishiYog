@@ -53,7 +53,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 
 
         public void bind(ProductModel productModel) {
-            binding.productImg.setImageResource(productModel.getImage());
+           // binding.productImg.setImageResource(productModel.getImage());
             binding.productName.setText(productModel.getProductName());
             binding.productPrice.setText(productModel.getProductPrice());
             binding.plusBtn.setOnClickListener(view -> {

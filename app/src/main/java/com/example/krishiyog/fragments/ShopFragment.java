@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,8 @@ import com.example.krishiyog.databinding.FragmentShopBinding;
 import com.example.krishiyog.models.CategoriesModel;
 import com.example.krishiyog.models.ProductModel;
 import com.example.krishiyog.shop.Cart;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +36,7 @@ import java.util.List;
 public class ShopFragment extends Fragment {
 
     FragmentShopBinding binding;
+    FirebaseFirestore db;
     ArrayList<SlideModel> slideModels = new ArrayList<>();
     ArrayList<CategoriesModel> categoriesModelList;
     List<ProductModel> productModelsList;
@@ -40,17 +44,31 @@ public class ShopFragment extends Fragment {
     ProductAdapter productAdapter;
 
     String[] categories = new String[]{
-            "Fruits",
-            "Herbs",
-            "Plants",
-            "Pesticides"
+            "Seed",
+            "Growth Promoter",
+            "Farm Equipments",
+            "Insecticide",
+            "Fungicide",
+            "Fertilizer",
+            "Gardening",
+            "Organic Farming",
+            "Herbicide",
+            "Pesticide",
+            "Cattle Farming"
     };
 
     int[] categoryImg = new int[]{
-            R.drawable.img1,
-            R.drawable.img2,
-            R.drawable.img3,
-            R.drawable.img4
+            R.drawable.seed,
+            R.drawable.growth_promoter,
+            R.drawable.farm_equipment,
+            R.drawable.insecticide,
+            R.drawable.fungicide,
+            R.drawable.fertilizer,
+            R.drawable.gardening,
+            R.drawable.organic_farming,
+            R.drawable.herbicide,
+            R.drawable.pesticide,
+            R.drawable.cattle_farming
     };
 
     public ShopFragment() {
@@ -62,6 +80,8 @@ public class ShopFragment extends Fragment {
                              Bundle savedInstanceState) {
         //binding
         binding = FragmentShopBinding.inflate(inflater, container, false);
+        //Reference
+        db = FirebaseFirestore.getInstance();
 
         //AdSlider Integration
         slideBanner();
@@ -87,29 +107,39 @@ public class ShopFragment extends Fragment {
     private void productRecyclerView() {
 
         binding.productRv.setLayoutManager(new GridLayoutManager(getContext(), 2));
-        binding.categoriesRv.setHasFixedSize(true);
+        binding.productRv.setHasFixedSize(true);
         productModelsList = new ArrayList<>();
         productAdapter = new ProductAdapter(productModelsList);
 
         binding.productRv.setAdapter(productAdapter);
 
-        //Adding Trial Product for testing
-        productModelsList.add(new ProductModel(categoryImg[1], "Apple", "$200", "4.2"));
-        productModelsList.add(new ProductModel(categoryImg[1], "Apple", "$200", "4.2"));
-        productModelsList.add(new ProductModel(categoryImg[1], "Apple", "$200", "4.2"));
-        productModelsList.add(new ProductModel(categoryImg[1], "Apple", "$200", "4.2"));
-        productModelsList.add(new ProductModel(categoryImg[1], "Apple", "$200", "4.2"));
-        productModelsList.add(new ProductModel(categoryImg[1], "Apple", "$200", "4.2"));
-        productModelsList.add(new ProductModel(categoryImg[1], "Apple", "$200", "4.2"));
+        // Fetch products from Firestore
+        fetchProducts();
+    }
 
+    private void fetchProducts() {
+        db.collection("products").addSnapshotListener((value, error) -> {
+            if (error != null){
+                Log.w("FirestoreData","Listened Failed.", error);
+                return;
+            }
 
-        productAdapter.notifyDataSetChanged();
+            if (value != null){
+                productModelsList.clear();
+                for (QueryDocumentSnapshot  documentSnapshot : value){
+                    ProductModel productModel = documentSnapshot.toObject(ProductModel.class);
+                    productModelsList.add(productModel);
+                }
+                productAdapter.notifyDataSetChanged(); // Notify adapter of data change
+            }
+        });
     }
 
     private void categoryRecyclerView() {
 
         binding.categoriesRv.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         binding.categoriesRv.setHasFixedSize(true);
+        binding.categoriesRv.setItemAnimator(null);
         categoriesModelList = new ArrayList<>();
         categoryAdapter = new CategoryAdapter(categoriesModelList);
         binding.categoriesRv.setAdapter(categoryAdapter);

@@ -1,5 +1,6 @@
 package com.example.krishiyog.shop;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -44,7 +45,7 @@ public class Cart extends AppCompatActivity {
         });
 
         //prodcut RecyclerView
-        itemRecyclerView();
+       // itemRecyclerView();
 
 
     }
@@ -59,13 +60,13 @@ public class Cart extends AppCompatActivity {
         binding.cartRv.setAdapter(cartAdapter);
 
         //Adding Trial Product for testing
-        productModelsList.add(new ProductModel(categoryImg[1], "Apple", "$200", "4.2"));
-        productModelsList.add(new ProductModel(categoryImg[1], "Apple", "$200", "4.2"));
-        productModelsList.add(new ProductModel(categoryImg[1], "Apple", "$200", "4.2"));
-        productModelsList.add(new ProductModel(categoryImg[1], "Apple", "$200", "4.2"));
-        productModelsList.add(new ProductModel(categoryImg[1], "Apple", "$200", "4.2"));
-        productModelsList.add(new ProductModel(categoryImg[1], "Apple", "$200", "4.2"));
-        productModelsList.add(new ProductModel(categoryImg[1], "Apple", "$200", "4.2"));
+//        productModelsList.add(new ProductModel(categoryImg[1], "Apple", "$200", "4.2"));
+//        productModelsList.add(new ProductModel(categoryImg[1], "Apple", "$200", "4.2"));
+//        productModelsList.add(new ProductModel(categoryImg[1], "Apple", "$200", "4.2"));
+//        productModelsList.add(new ProductModel(categoryImg[1], "Apple", "$200", "4.2"));
+//        productModelsList.add(new ProductModel(categoryImg[1], "Apple", "$200", "4.2"));
+//        productModelsList.add(new ProductModel(categoryImg[1], "Apple", "$200", "4.2"));
+//        productModelsList.add(new ProductModel(categoryImg[1], "Apple", "$200", "4.2"));
 
 
 
