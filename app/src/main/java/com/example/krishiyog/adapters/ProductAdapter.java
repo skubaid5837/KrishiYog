@@ -56,7 +56,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         public void bind(ProductModel productModel) {
             //binding.image.setImageResource(productModel.getImage());
             binding.productName.setText(productModel.getProductName());
-            binding.productPrice.setText(productModel.getProductPrice());
+            binding.productPrice.setText("₹"+productModel.getProductPrice());
             binding.productRating.setText(String.valueOf(productModel.getProductRating()));
             // Check if imageUrl is null before accessing it
             if (productModel.getImageUrls() != null && !productModel.getImageUrls().isEmpty()) {
@@ -84,6 +84,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                 bundle.putString("productName", productModel.getProductName());
                 bundle.putString("productName", productModel.getProductName());
                 bundle.putString("productName", productModel.getProductName());
+                bundle.putString("productId", productModel.getProductId());
                 i.putExtras(bundle);
                 view.getContext().startActivity(i);
             });
