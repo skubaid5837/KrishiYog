@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.krishiyog.R;
+import com.example.krishiyog.databinding.ExploreCardViewBinding;
+import com.example.krishiyog.shop.ExploreProduct;
 import com.example.krishiyog.shop.ProductDescription;
 import com.example.krishiyog.databinding.CardviewProductBinding;
 import com.example.krishiyog.models.ProductModel;
@@ -18,25 +20,48 @@ import com.example.krishiyog.models.ProductModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> {
+public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+    public static final int LAYOUT_EXPLORE = 1;
+    public static final int LAYOUT_HOME = 2;
 
     List<ProductModel> productModelArrayList;
+    private final int layoutType;
 
-    public ProductAdapter(List<ProductModel> productModelArrayList) {
+    public ProductAdapter(List<ProductModel> productModelArrayList, int layoutType) {
         this.productModelArrayList = productModelArrayList;
-    }
-
-    @NonNull
-    public ProductAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        CardviewProductBinding binding = CardviewProductBinding.inflate(inflater, parent, false);
-        return new ProductAdapter.ViewHolder(binding);
+        this.layoutType = layoutType;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ProductAdapter.ViewHolder holder, int position) {
+    public int getItemViewType(int position) {
+        return layoutType;
+    }
+
+    @NonNull
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        if (viewType == LAYOUT_EXPLORE) {
+            ExploreCardViewBinding binding = ExploreCardViewBinding.inflate(inflater, parent, false);
+            return new ExploreViewHolder(binding);
+        } else if (viewType == LAYOUT_HOME) {
+            CardviewProductBinding binding = CardviewProductBinding.inflate(inflater, parent, false);
+            return new HomeViewHolder(binding);
+        }
+        throw new IllegalArgumentException("Invalid view type");
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         ProductModel productModel = productModelArrayList.get(position);
-        holder.bind(productModel);
+
+        if (holder instanceof ExploreViewHolder) {
+            ((ExploreViewHolder) holder).bind(productModel);
+        } else if (holder instanceof HomeViewHolder) {
+            ((HomeViewHolder) holder).bind(productModel);
+        }
+       // holder.bind(productModel);
     }
 
     @Override
@@ -44,11 +69,57 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         return productModelArrayList.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    //Explore ViewHolder
+    public static class ExploreViewHolder extends RecyclerView.ViewHolder {
+        private final ExploreCardViewBinding binding;
+
+        public ExploreViewHolder(ExploreCardViewBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+        }
+
+        public void bind(ProductModel productModel) {
+            binding.productName.setText(productModel.getProductName());
+            binding.productQuantity.setText(productModel.getProductDescription());
+            binding.productPrice.setText("₹" + productModel.getProductPrice());
+
+            if (productModel.getImageUrls() != null && !productModel.getImageUrls().isEmpty()) {
+                String firstImageUrl = productModel.getImageUrls().get(0);
+                Glide.with(itemView.getContext())
+                        .load(firstImageUrl)
+                        .placeholder(R.drawable.pesticide)
+                        .into(binding.productImage);
+            } else {
+                binding.productImage.setImageResource(R.drawable.pesticide);
+            }
+
+            binding.addToCart.setOnClickListener(view -> {
+                Toast.makeText(view.getContext(), "Added to cart!", Toast.LENGTH_SHORT).show();
+            });
+
+            itemView.setOnClickListener(view -> {
+                Intent i = new Intent(view.getContext(), ProductDescription.class);
+
+                //Sending the product data to next activity
+                Bundle bundle = new Bundle();
+                ArrayList<String> imagesList = new ArrayList<>(productModel.getImageUrls());
+                bundle.putStringArrayList("imagesList", imagesList);
+                bundle.putString("productName", productModel.getProductName());
+                bundle.putString("productDescription", productModel.getProductDescription());
+                bundle.putString("productPrice", productModel.getProductPrice());
+                bundle.putString("productId", productModel.getProductId());
+                i.putExtras(bundle);
+                view.getContext().startActivity(i);
+            });
+        }
+    }
+
+    //Home ViewHolder
+    public static class HomeViewHolder extends RecyclerView.ViewHolder {
 
         private final CardviewProductBinding binding;
 
-        public ViewHolder(CardviewProductBinding binding) {
+        public HomeViewHolder(CardviewProductBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
@@ -80,10 +151,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                 bundle.putString("productName", productModel.getProductName());
                 bundle.putString("productDescription", productModel.getProductDescription());
                 bundle.putString("productPrice", productModel.getProductPrice());
-                bundle.putString("productId", productModel.getProductId());
-                bundle.putString("productName", productModel.getProductName());
-                bundle.putString("productName", productModel.getProductName());
-                bundle.putString("productName", productModel.getProductName());
                 bundle.putString("productId", productModel.getProductId());
                 i.putExtras(bundle);
                 view.getContext().startActivity(i);

@@ -85,6 +85,7 @@
                     android:textStyle="bold"/>
 
                 <TextView
+                    android:id="@+id/categoryExplore"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/view_all"
@@ -114,6 +115,7 @@
                     android:textStyle="bold"/>
 
                 <TextView
+                    android:id="@+id/exploreProduct"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/view_all"

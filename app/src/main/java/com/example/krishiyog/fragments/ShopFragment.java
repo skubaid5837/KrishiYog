@@ -27,6 +27,8 @@ import com.example.krishiyog.databinding.FragmentShopBinding;
 import com.example.krishiyog.models.CategoriesModel;
 import com.example.krishiyog.models.ProductModel;
 import com.example.krishiyog.shop.Cart;
+import com.example.krishiyog.shop.ExploreCategory;
+import com.example.krishiyog.shop.ExploreProduct;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -89,6 +91,18 @@ public class ShopFragment extends Fragment {
         //Open Cart
         binding.cartBtn.setOnClickListener(view -> openCartActivity());
 
+        //Open Explore Page
+        binding.exploreProduct.setOnClickListener(view -> {
+            Intent intent = new Intent(getContext(), ExploreProduct.class);
+            startActivity(intent);
+        });
+
+        //Open Category Explore Screen
+        binding.categoryExplore.setOnClickListener(view -> {
+            Intent i = new Intent(getContext(), ExploreCategory.class);
+            startActivity(i);
+        });
+
         //Category Recycler View
         categoryRecyclerView();
 
@@ -109,7 +123,7 @@ public class ShopFragment extends Fragment {
         binding.productRv.setLayoutManager(new GridLayoutManager(getContext(), 2));
         binding.productRv.setHasFixedSize(true);
         productModelsList = new ArrayList<>();
-        productAdapter = new ProductAdapter(productModelsList);
+        productAdapter = new ProductAdapter(productModelsList, ProductAdapter.LAYOUT_HOME);
 
         binding.productRv.setAdapter(productAdapter);
 
@@ -141,7 +155,7 @@ public class ShopFragment extends Fragment {
         binding.categoriesRv.setHasFixedSize(true);
         binding.categoriesRv.setItemAnimator(null);
         categoriesModelList = new ArrayList<>();
-        categoryAdapter = new CategoryAdapter(categoriesModelList);
+        categoryAdapter = new CategoryAdapter(categoriesModelList, CategoryAdapter.LAYOUT_HOME);
         binding.categoriesRv.setAdapter(categoryAdapter);
 
         for (int i=0 ; i<categories.length ; i++){

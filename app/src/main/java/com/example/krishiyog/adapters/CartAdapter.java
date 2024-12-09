@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.krishiyog.FirebaseManager;
 import com.example.krishiyog.R;
+import com.example.krishiyog.databinding.CardviewCheckoutBinding;
 import com.example.krishiyog.databinding.CardviewProductBinding;
 import com.example.krishiyog.databinding.CartProductCardviewBinding;
 import com.example.krishiyog.models.CartModel;
@@ -28,19 +29,28 @@ import java.util.Map;
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 
     List<CartModel> productModelArrayList;
+    private boolean isCheckout;
+    private LayoutInflater inflater;
     Cart cartActivity;
 
-    public CartAdapter(List<CartModel> productModelArrayList, Cart cartActivity) {
+    public CartAdapter(List<CartModel> productModelArrayList, Cart cartActivity, boolean isCheckout) {
         this.productModelArrayList = productModelArrayList;
         this.cartActivity = cartActivity;
+        this.isCheckout = isCheckout;
     }
 
     @NonNull
     @Override
     public CartAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        CartProductCardviewBinding binding = CartProductCardviewBinding.inflate(inflater, parent, false);
-        return new ViewHolder(binding);
+        inflater = LayoutInflater.from(parent.getContext());
+        if(isCheckout){
+            CardviewCheckoutBinding binding = CardviewCheckoutBinding.inflate(inflater, parent, false);
+            return  new ViewHolder(binding);
+        }
+        else {
+            CartProductCardviewBinding binding = CartProductCardviewBinding.inflate(inflater, parent, false);
+            return new ViewHolder(binding);
+        }
     }
 
     @Override
@@ -56,77 +66,84 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
-        private final CartProductCardviewBinding binding;
-        String userId;
+        private CartProductCardviewBinding cartBinding;
+        private CardviewCheckoutBinding checkoutBinding;
+        String userId = FirebaseManager.getInstance().getAuth().getCurrentUser().getUid();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        public ViewHolder(CartProductCardviewBinding binding) {
-            super(binding.getRoot());
-            this.binding = binding;
+        public ViewHolder(CartProductCardviewBinding cartBinding) {
+            super(cartBinding.getRoot());
+            this.cartBinding = cartBinding;
         }
 
+        public  ViewHolder(CardviewCheckoutBinding checkoutBinding) {
+            super(checkoutBinding.getRoot());
+            this.checkoutBinding = checkoutBinding;
+        }
 
         public void bind(CartModel productModel) {
+            if (isCheckout) {
+                // Bind data for Checkout Activity
+                checkoutBinding.productName.setText(productModel.getProductName());
+                checkoutBinding.productPrice.setText("₹" + productModel.getProductPrice());
+                Glide.with(itemView.getContext())
+                        .load(productModel.getImageUrls())
+                        .into(checkoutBinding.productImage);
+            } else {
+                // Bind data for Cart Activity
+                cartBinding.productName.setText(productModel.getProductName());
+                cartBinding.productPrice.setText("₹" + productModel.getProductPrice());
+                cartBinding.productQuantity.setText(String.valueOf(productModel.getQuantity()));
+                Glide.with(itemView.getContext())
+                        .load(productModel.getImageUrls())
+                        .into(cartBinding.productImg);
 
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
-            FirebaseAuth auth = FirebaseAuth.getInstance();
-
-            userId = auth.getCurrentUser().getUid();
-
-            binding.productName.setText(productModel.getProductName());
-            binding.productPrice.setText("₹"+productModel.getProductPrice());
-            binding.productQuantity.setText(String.valueOf(productModel.getQuantity()));
-
-            // Handle Plus button click
-            binding.plusBtn.setOnClickListener(view -> {
-                int productQuantity = productModel.getQuantity() + 1;
-                productModel.setQuantity(productQuantity);
-                binding.productQuantity.setText(String.valueOf(productQuantity));
-                updateProductQuantityInFirebase(productModel);
-                cartActivity.updatePriceDetails(productModel.getProductPrice(), true);
-                notifyDataSetChanged();
-                Toast.makeText(view.getContext(), "Added one item", Toast.LENGTH_SHORT).show();
-            });
-
-            // Handle Minus button click
-            binding.minusBtn.setOnClickListener(v -> {
-                int quantity = productModel.getQuantity();
-                if (quantity > 1) {
-                    quantity--;
-                    productModel.setQuantity(quantity);
-                    binding.productQuantity.setText(String.valueOf(quantity));
+                // Handle cart-specific actions
+                cartBinding.plusBtn.setOnClickListener(view -> {
+                    int productQuantity = productModel.getQuantity() + 1;
+                    productModel.setQuantity(productQuantity);
+                    cartBinding.productQuantity.setText(String.valueOf(productQuantity));
                     updateProductQuantityInFirebase(productModel);
-                    cartActivity.updatePriceDetails(productModel.getProductPrice(), false);
-                    Toast.makeText(cartActivity, "Removed one item", Toast.LENGTH_SHORT).show();
-                }
-            });
+                    cartActivity.updatePriceDetails(productModel.getProductPrice(), true);
+                    Toast.makeText(view.getContext(), "Added one item", Toast.LENGTH_SHORT).show();
+                });
 
-            Glide.with(itemView.getContext())
-                    .load(productModel.getImageUrls())
-                    .into(binding.productImg);
+                cartBinding.minusBtn.setOnClickListener(view -> {
+                    int quantity = productModel.getQuantity();
+                    if (quantity > 1) {
+                        quantity--;
+                        productModel.setQuantity(quantity);
+                        cartBinding.productQuantity.setText(String.valueOf(quantity));
+                        updateProductQuantityInFirebase(productModel);
+                        cartActivity.updatePriceDetails(productModel.getProductPrice(), false);
+                    }
+                });
 
-            //Delete item from cart
-            binding.deleteItem.setOnClickListener(view -> {
+                cartBinding.deleteItem.setOnClickListener(view -> {
+                    int position = getAdapterPosition();
+                    String productId = productModel.getProductId();
 
-                int position = getAdapterPosition();
-                String productId = productModel.getProductId();
+                    // Remove product from Firestore
+                    db.collection("cartItem").document(userId)
+                            .update("productList." + productId, FieldValue.delete())
+                            .addOnSuccessListener(aVoid -> {
 
-                // Remove product from Firestore
-                db.collection("cartItem").document(userId)
-                        .update("productList." + productId, FieldValue.delete())
-                        .addOnSuccessListener(aVoid -> {
+                                // Remove item from list and update RecyclerView
+                                String removedPrice = productModel.getProductPrice();
+                                removedPrice = removedPrice.replace("₹", "");
+                                int price = Integer.parseInt(removedPrice);
+                                price = price * productModel.getQuantity();
+                                productModelArrayList.remove(position);
+                                notifyItemRemoved(position);
 
-                            // Remove item from list and update RecyclerView
-                            String removedPrice = productModel.getProductPrice();
-                            productModelArrayList.remove(position);
-                            notifyItemRemoved(position);
+                                // Call method to update item count in Cart activity
+                                cartActivity.updatePriceDetails(String.valueOf(price), false);
 
-                            // Call method to update item count in Cart activity
-                            cartActivity.updatePriceDetails(removedPrice, false);
-
-                            Toast.makeText(view.getContext(), "Item removed from cart", Toast.LENGTH_SHORT).show();
-                        })
-                        .addOnFailureListener(e -> Toast.makeText(view.getContext(), "Error removing item", Toast.LENGTH_SHORT).show());
-            });
+                                Toast.makeText(view.getContext(), "Item removed from cart", Toast.LENGTH_SHORT).show();
+                            })
+                            .addOnFailureListener(e -> Toast.makeText(view.getContext(), "Error removing item", Toast.LENGTH_SHORT).show());
+                });
+            }
         }
 
         private void updateProductQuantityInFirebase(CartModel product) {

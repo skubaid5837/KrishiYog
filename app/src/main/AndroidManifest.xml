@@ -14,8 +14,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.KrishiYog"
         tools:targetApi="31">
-        <activity android:name=".MyApplication"
-            android:exported="false"/>
+        <activity
+            android:name=".shop.CheckoutActivity"
+            android:exported="false" />
+        <activity
+            android:name=".shop.ExploreCategoryProduct"
+            android:exported="false" />
+        <activity
+            android:name=".shop.ExploreCategory"
+            android:exported="false" />
+        <activity
+            android:name=".shop.ExploreProduct"
+            android:exported="false" />
+        <activity
+            android:name=".MyApplication"
+            android:exported="false" />
         <activity
             android:name=".shop.ProductDescription"
             android:exported="false" />
@@ -24,17 +37,13 @@
             android:exported="false" />
         <activity
             android:name=".HomeScreen"
-            android:exported="false">
-        </activity>
+            android:exported="false" />
         <activity
             android:name=".SignupScreen"
-            android:exported="false">
-        </activity>
+            android:exported="false" />
         <activity
             android:name=".LoginScreen"
-            android:exported="false">
-
-        </activity>
+            android:exported="false" />
         <activity
             android:name=".SplashActivity"
             android:exported="false">

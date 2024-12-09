@@ -20,6 +20,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.security.Key;
 import java.util.ArrayList;
@@ -54,6 +56,10 @@ public class ProductDescription extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
 
+        binding.closeBtn.setOnClickListener(view -> {
+            finish();
+        });
+
         //Linking the Data
         productId = bundle.getString("productId");
         binding.productDescription.setText(bundle.getString("productDescription"));
@@ -84,6 +90,7 @@ public class ProductDescription extends AppCompatActivity {
             });
         }
     }
+
 
     @Override
     protected void onResume() {

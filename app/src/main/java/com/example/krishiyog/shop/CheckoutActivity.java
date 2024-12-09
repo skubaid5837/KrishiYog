@@ -13,12 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.krishiyog.R;
 import com.example.krishiyog.adapters.CartAdapter;
-import com.example.krishiyog.adapters.CategoryAdapter;
-import com.example.krishiyog.adapters.ProductAdapter;
-import com.example.krishiyog.databinding.ActivityCartBinding;
-import com.example.krishiyog.fragments.ShopFragment;
+import com.example.krishiyog.databinding.ActivityCheckoutBinding;
 import com.example.krishiyog.models.CartModel;
-import com.example.krishiyog.models.ProductModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -26,24 +22,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class Cart extends AppCompatActivity {
+public class CheckoutActivity extends AppCompatActivity {
 
-    ActivityCartBinding binding;
-    List<CartModel> productModelsList;
-    CartAdapter cartAdapter;
-    FirebaseAuth auth;
+    ActivityCheckoutBinding binding;
     FirebaseFirestore db;
+    List<CartModel> cartModelList;
+    CartAdapter cartAdapter;
+    FirebaseAuth mAuth;
+    Intent i;
 
-    private double totalMRP = 0.0;
-    private double discountAmount = 0.0; // Example discount
-    private double shippingCharges = 50.0; // Default shipping charges
-    private double totalAmount = 0.0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        binding = ActivityCartBinding.inflate(getLayoutInflater());
+        binding = ActivityCheckoutBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -51,39 +44,35 @@ public class Cart extends AppCompatActivity {
             return insets;
         });
 
-        auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+        i = getIntent();
 
         binding.backBtn.setOnClickListener(view -> {
-            finish();
+            onBackPressed();
         });
 
-        binding.checkoutBtn.setOnClickListener(view -> {
-            Intent i = new Intent(this, CheckoutActivity.class);
-            i.putExtra("totalMrp", totalMRP);
-            i.putExtra("discount", discountAmount);
-            i.putExtra("delivery", shippingCharges);
-            i.putExtra("finalMrp", totalAmount);
-            startActivity(i);
-        });
+        binding.originalPrice.setText("₹" + i.getDoubleExtra("totalMrp", 0.0));
+        binding.deliveryPrice.setText("₹" + i.getDoubleExtra("delivery", 0.0));
+        binding.discountPrice.setText("₹" + i.getDoubleExtra("discount", 0.0));
+        binding.totalPrice.setText("₹" + i.getDoubleExtra("finalMrp", 0.0));
 
         //product RecyclerView
         itemRecyclerView();
-
 
     }
 
     private void itemRecyclerView() {
 
-        binding.cartRv.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
-        binding.cartRv.hasFixedSize();
-        productModelsList = new ArrayList<>();
-        cartAdapter = new CartAdapter(productModelsList, this, false);
-        binding.cartRv.setAdapter(cartAdapter);
+        binding.productRv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        binding.productRv.hasFixedSize();
+        cartModelList = new ArrayList<>();
+        cartAdapter = new CartAdapter(cartModelList, null, true);
+        binding.productRv.setAdapter(cartAdapter);
 
-        String userId = auth.getCurrentUser().getUid();
+        String userId = mAuth.getCurrentUser().getUid();
 
-        //fetch the cartItem
+        //fetch CartItem
         db.collection("cartItem")
                 .document(userId)
                 .get()
@@ -94,8 +83,7 @@ public class Cart extends AppCompatActivity {
 
                         if (productIds != null) {
                             // Clear previous data if necessary
-                            productModelsList.clear();
-                            totalMRP = 0; // Reset total price
+                            cartModelList.clear();
 
                             // Iterate through the product IDs and their quantities
                             for (Map.Entry<String, Long> entry : productIds.entrySet()) {
@@ -113,76 +101,25 @@ public class Cart extends AppCompatActivity {
                                                 List<String> imageUrls = (List<String>) productDoc.get("imageUrls");
                                                 String imageUrl = (imageUrls != null && !imageUrls.isEmpty()) ? imageUrls.get(0) : null;
 
-                                                // Calculate total price
-                                                assert price != null;
-                                                double itemPrice = Double.parseDouble(price);
-                                                totalMRP += itemPrice * quantity; // Add the price for the quantity of this product
-
                                                 // Create a new CartModel and add it to the list
                                                 CartModel cartModel = new CartModel(imageUrl, productName, price, productId, quantity);
-                                                productModelsList.add(cartModel);
+                                                cartModelList.add(cartModel);
 
                                                 // Notify the adapter of the new data
                                                 cartAdapter.notifyDataSetChanged();
 
-                                                updatePriceDetails("0",true); // Update price details whenever a product is added
                                             }
                                         }).addOnFailureListener(e -> {
                                             Toast.makeText(this, "Error in getting product id: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                                         });
                             }
                         }
-                    } else {
-                        Toast.makeText(this, "No product in cart", Toast.LENGTH_SHORT).show();
-                        updatePriceDetails("0",true);
+                    }else {
+                        Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
                     }
                 }).addOnFailureListener(e -> {
                     Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
-    }
 
-    public void updatePriceDetails(String removedPrice, Boolean isAdd) {
-
-        // Assuming 'removedPrice' is the price of the product removed
-        if (!removedPrice.isEmpty()) {
-            double priceValue = Double.parseDouble(removedPrice.replace("₹", ""));
-
-            // Add or subtract the price based on the action
-            if (isAdd) {
-                totalMRP += priceValue;
-            } else {
-                totalMRP -= priceValue;
-            }
-        }
-
-        // Calculate discount and shipping charges
-        discountAmount = totalMRP * 0.05;
-
-        if (productModelsList.isEmpty()) {
-            shippingCharges = 0.0;
-        } else if (totalMRP - discountAmount >= 500) {
-            shippingCharges = 0.0; // Free shipping for orders over ₹500
-        } else {
-            shippingCharges = 50.0;
-        }
-
-        // Calculate total amount
-        totalAmount = totalMRP - discountAmount + shippingCharges;
-
-        binding.mrpPrice.setText("₹" + totalMRP);
-        binding.discountAmount.setText("₹" + discountAmount);
-        binding.shippingAmount.setText("₹" + shippingCharges);
-        binding.totalPrice.setText("₹" + totalAmount);
-
-        if(productModelsList.isEmpty()){
-            binding.mrpPrice.setText("₹0.0");
-            binding.discountAmount.setText("₹0.0");
-            binding.shippingAmount.setText("₹0.0");
-            binding.totalPrice.setText("₹0.0");
-        }
-
-        // Update item count
-        int count = productModelsList.size();
-        binding.itemCount.setText("Items (" + count + ")");
     }
 }
