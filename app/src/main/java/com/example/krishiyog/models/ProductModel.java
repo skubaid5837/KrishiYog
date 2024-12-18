@@ -14,18 +14,20 @@ public class ProductModel {
     int productRating;
     String productDescription;
     String productCategory;
-    String productQuantity;
+    String productSize;
+    String productUnit;
     String productId;
     String sellerId;
 
-    public ProductModel(List<String> imageUrls, String productName, String productPrice, int productRating, String productDescription, String productCategory, String productQuantity, String productId, String sellerId) {
+    public ProductModel(List<String> imageUrls, String productName, String productPrice, int productRating, String productDescription, String productCategory, String productSize, String productUnit, String productId, String sellerId) {
         this.imageUrls = imageUrls;
         this.productName = productName;
         this.productPrice = productPrice;
         this.productRating = productRating;
         this.productDescription = productDescription;
         this.productCategory = productCategory;
-        this.productQuantity = productQuantity;
+        this.productSize = productSize;
+        this.productUnit = productUnit;
         this.productId = productId;
         this.sellerId = sellerId;
     }
@@ -81,12 +83,20 @@ public class ProductModel {
         this.productCategory = productCategory;
     }
 
-    public String getProductQuantity() {
-        return productQuantity;
+    public String getProductSize() {
+        return productSize;
     }
 
-    public void setProductQuantity(String productQuantity) {
-        this.productQuantity = productQuantity;
+    public void setProductSize(String productSize) {
+        this.productSize = productSize;
+    }
+
+    public String getProductUnit() {
+        return productUnit;
+    }
+
+    public void setProductUnit(String productUnit) {
+        this.productUnit = productUnit;
     }
 
     public String getProductId() {

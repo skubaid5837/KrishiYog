@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="210dp"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_margin="8dp"
     app:cardCornerRadius="8dp"
@@ -25,28 +25,47 @@
             android:src="@drawable/pesticide"
             android:contentDescription="Pesticide" />
 
-        <!-- Name -->
-        <TextView
-            android:id="@+id/productName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:text="Beverage Name"
-            android:textColor="@color/black"
-            android:textSize="14sp"
-            android:textStyle="bold" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <!-- Description -->
-        <TextView
-            android:id="@+id/productQuantity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="Quantity, Price"
-            android:textColor="@color/black"
-            android:textSize="12sp" />
+            <!-- Name -->
+            <TextView
+                android:id="@+id/productName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="Beverage Name"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <!-- Description -->
+
+            <!-- Description -->
+            <TextView
+                android:id="@+id/productSize"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginStart="4dp"
+                android:text="Quantity"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/productUnit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginStart="4dp"
+                android:text="Unit"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+
+        </LinearLayout>
 
         <!-- Price and Add Button -->
         <LinearLayout
@@ -65,13 +84,15 @@
                 android:textStyle="bold"
                 android:textSize="14sp" />
 
-            <!-- Add Button -->
-            <ImageView
-                android:id="@+id/addToCart"
-                android:layout_width="match_parent"
-                android:layout_height="36dp"
-                android:src="@drawable/ic_add"
-                android:layout_marginStart="24dp"/>
+<!--            &lt;!&ndash; Add Button &ndash;&gt;-->
+<!--            <ImageButton-->
+<!--                android:id="@+id/addToCart"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="36dp"-->
+<!--                android:layout_marginStart="24dp"-->
+<!--                android:layout_weight="1"-->
+<!--                android:background="?attr/selectableItemBackgroundBorderless"-->
+<!--                android:src="@drawable/ic_add" />-->
 
         </LinearLayout>
     </LinearLayout>

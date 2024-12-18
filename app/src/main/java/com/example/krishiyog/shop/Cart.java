@@ -131,6 +131,7 @@ public class Cart extends AppCompatActivity {
                                             Toast.makeText(this, "Error in getting product id: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                                         });
                             }
+                            updatePriceDetails("0",true);
                         }
                     } else {
                         Toast.makeText(this, "No product in cart", Toast.LENGTH_SHORT).show();
@@ -144,7 +145,7 @@ public class Cart extends AppCompatActivity {
     public void updatePriceDetails(String removedPrice, Boolean isAdd) {
 
         // Assuming 'removedPrice' is the price of the product removed
-        if (!removedPrice.isEmpty()) {
+        if (removedPrice != null && !removedPrice.isEmpty() && !removedPrice.equals("0")) {
             double priceValue = Double.parseDouble(removedPrice.replace("₹", ""));
 
             // Add or subtract the price based on the action
@@ -166,23 +167,59 @@ public class Cart extends AppCompatActivity {
             shippingCharges = 50.0;
         }
 
-        // Calculate total amount
-        totalAmount = totalMRP - discountAmount + shippingCharges;
+        // Reset or calculate fields based on cart status
+        if (productModelsList.isEmpty()) {
+            totalMRP = 0.0;
+            discountAmount = 0.0;
+            shippingCharges = 0.0;
+            totalAmount = 0.0;
 
+            binding.checkoutBtn.setEnabled(false);
+            binding.checkoutBtn.setAlpha(0.5f);
+
+        } else {
+            discountAmount = totalMRP * 0.05;
+            shippingCharges = totalMRP - discountAmount >= 500 ? 0.0 : 50.0;
+            totalAmount = totalMRP - discountAmount + shippingCharges;
+
+            binding.checkoutBtn.setEnabled(true);
+            binding.checkoutBtn.setAlpha(1.0f);
+        }
+
+        // Update UI fields
         binding.mrpPrice.setText("₹" + totalMRP);
         binding.discountAmount.setText("₹" + discountAmount);
         binding.shippingAmount.setText("₹" + shippingCharges);
         binding.totalPrice.setText("₹" + totalAmount);
 
-        if(productModelsList.isEmpty()){
-            binding.mrpPrice.setText("₹0.0");
-            binding.discountAmount.setText("₹0.0");
-            binding.shippingAmount.setText("₹0.0");
-            binding.totalPrice.setText("₹0.0");
-        }
-
         // Update item count
         int count = productModelsList.size();
         binding.itemCount.setText("Items (" + count + ")");
+
+        // Calculate total amount
+//        totalAmount = totalMRP - discountAmount + shippingCharges;
+//
+//        binding.mrpPrice.setText("₹" + totalMRP);
+//        binding.discountAmount.setText("₹" + discountAmount);
+//        binding.shippingAmount.setText("₹" + shippingCharges);
+//        binding.totalPrice.setText("₹" + totalAmount);
+//
+//        if(productModelsList.isEmpty()){
+//            binding.mrpPrice.setText("₹0.0");
+//            binding.discountAmount.setText("₹0.0");
+//            binding.shippingAmount.setText("₹0.0");
+//            binding.totalPrice.setText("₹0.0");
+//            binding.checkoutBtn.setEnabled(false);
+//            binding.checkoutBtn.setAlpha(0.5f);
+//            Toast.makeText(this, "no product", Toast.LENGTH_SHORT).show();
+//        }
+//        else {
+//            binding.checkoutBtn.setEnabled(true);
+//        }
+//
+//
+//        // Update item count
+//        int count = productModelsList.size();
+//        binding.itemCount.setText("Items (" + count + ")");
     }
 }

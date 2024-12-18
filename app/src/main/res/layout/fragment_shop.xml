@@ -8,7 +8,7 @@
     android:padding="10dp"
     tools:context=".fragments.ShopFragment">
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="none">
@@ -126,13 +126,10 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/productRv"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
         </LinearLayout>
 
 
-    </ScrollView>
-
-
-
+    </androidx.core.widget.NestedScrollView>
 
 </FrameLayout>

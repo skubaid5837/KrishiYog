@@ -35,6 +35,7 @@ public class ProductDescription extends AppCompatActivity {
     ActivityProductDescriptionBinding binding;
     ArrayList<SlideModel> slideModels = new ArrayList<>();
     ArrayList<String> imageUris;
+    private int currentQuantity = 1;
     private FirebaseFirestore db;
     private FirebaseAuth auth;
     private String productId;
@@ -60,16 +61,33 @@ public class ProductDescription extends AppCompatActivity {
             finish();
         });
 
+        binding.btnIncreaseQuantity.setOnClickListener(view -> {
+            currentQuantity++;
+            updateCurrentQuantity();
+        });
+
+        binding.btnDecreaseQuantity.setOnClickListener(view -> {
+            if (currentQuantity>1){
+                currentQuantity--;
+                updateCurrentQuantity();
+            }
+            else {
+                Toast.makeText(this, "Minimum quantity is 1", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         //Linking the Data
         productId = bundle.getString("productId");
         binding.productDescription.setText(bundle.getString("productDescription"));
         binding.productName.setText(bundle.getString("productName"));
         binding.productPrice.setText("₹"+bundle.getString("productPrice"));
+        binding.productSize.setText(bundle.getString("productSize"));
+        binding.productUnit.setText(bundle.getString("productUnit"));
         if(bundle.getStringArrayList("imagesList") != null) {
             imageUris = bundle.getStringArrayList("imagesList");
             int size = imageUris.size();
             for(int i=0 ; i<size ; i++){
-                slideModels.add(new SlideModel(imageUris.get(i), ScaleTypes.FIT));
+                slideModels.add(new SlideModel(imageUris.get(i), ScaleTypes.CENTER_INSIDE));
             }
 
             // Set the image list directly to the ImageSlider
@@ -85,10 +103,14 @@ public class ProductDescription extends AppCompatActivity {
                     startActivity(new Intent(ProductDescription.this, Cart.class));
                 } else {
                     // Add to cart
-                    addToCart();
+                    addToCart(currentQuantity);
                 }
             });
         }
+    }
+
+    private void updateCurrentQuantity() {
+        binding.tvQuantity.setText(String.valueOf(currentQuantity));
     }
 
 
@@ -121,7 +143,7 @@ public class ProductDescription extends AppCompatActivity {
                 });
     }
 
-    private void addToCart() {
+    private void addToCart(int quantity) {
         String userId = auth.getCurrentUser().getUid();
         db.runTransaction(transaction -> {
             DocumentSnapshot snapshot = transaction.get(db.collection("cartItem").document(userId));
@@ -135,7 +157,7 @@ public class ProductDescription extends AppCompatActivity {
                 cartData = new HashMap<>();
             }
             // Update the quantity for the product
-            int newQuantity = cartData.getOrDefault(productId, 0) + 1;
+            int newQuantity = cartData.getOrDefault(productId, 0) + quantity;
             cartData.put(productId, newQuantity);
 
             // Set the updated product quantities in the cart document

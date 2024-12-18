@@ -1,6 +1,5 @@
 package com.example.krishiyog.fragments;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -8,14 +7,11 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager2.widget.ViewPager2;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.denzcoskun.imageslider.constants.AnimationTypes;
 import com.denzcoskun.imageslider.constants.ScaleTypes;
@@ -126,6 +122,7 @@ public class ShopFragment extends Fragment {
         productAdapter = new ProductAdapter(productModelsList, ProductAdapter.LAYOUT_HOME);
 
         binding.productRv.setAdapter(productAdapter);
+
 
         // Fetch products from Firestore
         fetchProducts();

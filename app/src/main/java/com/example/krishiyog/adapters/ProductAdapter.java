@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.krishiyog.R;
 import com.example.krishiyog.databinding.ExploreCardViewBinding;
-import com.example.krishiyog.shop.ExploreProduct;
 import com.example.krishiyog.shop.ProductDescription;
 import com.example.krishiyog.databinding.CardviewProductBinding;
 import com.example.krishiyog.models.ProductModel;
@@ -61,7 +60,6 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         } else if (holder instanceof HomeViewHolder) {
             ((HomeViewHolder) holder).bind(productModel);
         }
-       // holder.bind(productModel);
     }
 
     @Override
@@ -80,7 +78,8 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         public void bind(ProductModel productModel) {
             binding.productName.setText(productModel.getProductName());
-            binding.productQuantity.setText(productModel.getProductDescription());
+            binding.productSize.setText("("+productModel.getProductSize());
+            binding.productUnit.setText(productModel.getProductUnit()+")");
             binding.productPrice.setText("₹" + productModel.getProductPrice());
 
             if (productModel.getImageUrls() != null && !productModel.getImageUrls().isEmpty()) {
@@ -93,10 +92,6 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 binding.productImage.setImageResource(R.drawable.pesticide);
             }
 
-            binding.addToCart.setOnClickListener(view -> {
-                Toast.makeText(view.getContext(), "Added to cart!", Toast.LENGTH_SHORT).show();
-            });
-
             itemView.setOnClickListener(view -> {
                 Intent i = new Intent(view.getContext(), ProductDescription.class);
 
@@ -106,6 +101,8 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 bundle.putStringArrayList("imagesList", imagesList);
                 bundle.putString("productName", productModel.getProductName());
                 bundle.putString("productDescription", productModel.getProductDescription());
+                bundle.putString("productSize", "("+productModel.getProductSize());
+                bundle.putString("productUnit", productModel.getProductUnit()+")");
                 bundle.putString("productPrice", productModel.getProductPrice());
                 bundle.putString("productId", productModel.getProductId());
                 i.putExtras(bundle);
@@ -127,6 +124,8 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         public void bind(ProductModel productModel) {
             //binding.image.setImageResource(productModel.getImage());
             binding.productName.setText(productModel.getProductName());
+            binding.productSize.setText("("+productModel.getProductSize());
+            binding.productUnit.setText(productModel.getProductUnit()+")");
             binding.productPrice.setText("₹"+productModel.getProductPrice());
             binding.productRating.setText(String.valueOf(productModel.getProductRating()));
             // Check if imageUrl is null before accessing it
@@ -150,6 +149,8 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 bundle.putStringArrayList("imagesList", imagesList);
                 bundle.putString("productName", productModel.getProductName());
                 bundle.putString("productDescription", productModel.getProductDescription());
+                bundle.putString("productSize", "("+productModel.getProductSize());
+                bundle.putString("productUnit", productModel.getProductUnit()+")");
                 bundle.putString("productPrice", productModel.getProductPrice());
                 bundle.putString("productId", productModel.getProductId());
                 i.putExtras(bundle);

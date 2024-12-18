@@ -11,20 +11,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.krishiyog.FirebaseManager;
-import com.example.krishiyog.R;
 import com.example.krishiyog.databinding.CardviewCheckoutBinding;
-import com.example.krishiyog.databinding.CardviewProductBinding;
 import com.example.krishiyog.databinding.CartProductCardviewBinding;
 import com.example.krishiyog.models.CartModel;
-import com.example.krishiyog.models.ProductModel;
 import com.example.krishiyog.shop.Cart;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 
@@ -84,8 +77,11 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         public void bind(CartModel productModel) {
             if (isCheckout) {
                 // Bind data for Checkout Activity
+                int count = productModel.getQuantity();
+                int price =count * Integer.parseInt(productModel.getProductPrice());
                 checkoutBinding.productName.setText(productModel.getProductName());
-                checkoutBinding.productPrice.setText("₹" + productModel.getProductPrice());
+                checkoutBinding.productPrice.setText("₹" + price);
+                checkoutBinding.quantity.setText("Quantity (" + count + ")");
                 Glide.with(itemView.getContext())
                         .load(productModel.getImageUrls())
                         .into(checkoutBinding.productImage);

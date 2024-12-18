@@ -93,7 +93,7 @@ public class SignupScreen extends AppCompatActivity {
                         // Get the user ID
                         String userId = currentUser.getUid();
                         // Create the User object with provided details
-                        User user = new User(userId, name, email, phoneNumber, "", false); // profilePhotoUrl is empty for now
+                        User user = new User(userId, name, email, phoneNumber, "", false, null); // profilePhotoUrl is empty for now
                         storeUsersDetail(user);
 
                         // Create an Intent to start the new activity

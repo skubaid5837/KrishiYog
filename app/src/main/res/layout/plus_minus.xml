@@ -10,25 +10,28 @@
         android:layout_gravity="center"
         android:layout_margin="5dp">
 
-        <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_minus"/>
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_minus"/>
 
-        <TextView android:id="@+id/productQuantity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="1"
-        android:paddingHorizontal="20dp"
-        android:textColor="@color/primaryBlack"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        android:layout_weight="1"/>
+        <TextView
+            android:id="@+id/productQuantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1"
+            android:paddingHorizontal="20dp"
+            android:textColor="@color/primaryBlack"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_weight="1"/>
 
-        <ImageView
+        <ImageButton
             android:id="@+id/plusBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:layout_weight="1"
             android:src="@drawable/ic_add"/>
 
