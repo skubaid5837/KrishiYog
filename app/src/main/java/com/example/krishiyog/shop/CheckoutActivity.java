@@ -20,13 +20,19 @@ import com.example.krishiyog.R;
 import com.example.krishiyog.adapters.CartAdapter;
 import com.example.krishiyog.databinding.ActivityCheckoutBinding;
 import com.example.krishiyog.databinding.DialogEditAddressBinding;
+import com.example.krishiyog.fragments.ShopFragment;
 import com.example.krishiyog.models.CartModel;
+import com.example.krishiyog.models.OrderModel;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class CheckoutActivity extends AppCompatActivity {
@@ -37,6 +43,8 @@ public class CheckoutActivity extends AppCompatActivity {
     CartAdapter cartAdapter;
     FirebaseAuth mAuth;
     Intent i;
+    String userId;
+    String orderId;
 
 
     @Override
@@ -54,6 +62,7 @@ public class CheckoutActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         i = getIntent();
+        userId = mAuth.getCurrentUser().getUid();
 
         binding.backBtn.setOnClickListener(view -> {
             onBackPressed();
@@ -70,12 +79,106 @@ public class CheckoutActivity extends AppCompatActivity {
         //fetch Address from db
         fetchAddress();
 
+        //Placed Order
+        binding.btnProceedToCheckout.setOnClickListener(view -> {
+            placeOrder();
+        });
+
         //Edit address
         binding.editAddress.setOnClickListener(view -> {
             showEditAddressDialog();
         });
 
     }
+
+    private void placeOrder() {
+        // Fetch cart items from Firebase
+        db.collection("cartItem")
+                .document(userId)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        // Get product list from cart
+                        Map<String, Long> productList = (Map<String, Long>) documentSnapshot.get("productList");
+
+                        // Proceed if there are items in the cart
+                        if (productList != null && !productList.isEmpty()) {
+                            // Loop through the product IDs and their quantities
+                            for (Map.Entry<String, Long> entry : productList.entrySet()) {
+                                String productId = entry.getKey();
+                                int quantity = entry.getValue().intValue();
+
+                                // Fetch product details from Firestore (price, name, etc.)
+                                db.collection("products").document(productId)
+                                        .get()
+                                        .addOnSuccessListener(productDoc -> {
+                                            if (productDoc.exists()) {
+                                                String productName = productDoc.getString("productName");
+                                                String productPrice = productDoc.getString("productPrice");
+                                                String productUnit = productDoc.getString("productUnit");
+
+                                                // Create an order model for each cart item
+                                                OrderModel order = new OrderModel(
+                                                        productId,  // productId
+                                                        userId, //  userId
+                                                        orderId,// orderId
+                                                        String.valueOf(quantity), // product quantity
+                                                        "ongoing",    // Order status (initially "Placed")
+                                                        getCurrentDate()  // Order date
+                                                );
+
+                                                // Save the order to Firestore
+                                                saveOrderToFirestore(order);
+                                            }
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            Toast.makeText(this, "Error getting product details: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                        });
+                            }
+
+                            // After placing the orders, clear the cart
+                            clearCart();
+                            startActivity(new Intent(this, OrderScreen.class));
+                            finish();  // Close the checkout activity
+                        } else {
+                            Toast.makeText(this, "Your cart is empty", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(this, "Error fetching cart items", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, "Error fetching cart: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
+
+    }
+
+    private void clearCart() {
+        // clear the cart after placing the order (you can remove cart items from Firestore)
+        db.collection("cartItem").document(userId).update("productList", new HashMap<>());
+    }
+
+    private void saveOrderToFirestore(OrderModel order) {
+        orderId = db.collection("orders").document().getId();  // Generate a unique order ID
+        order.setOrderId(orderId);
+        // Save order details to Firestore under the orders collection
+        db.collection("orders")
+                .document(orderId)  // Using the generated order ID
+                .set(order)
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(this, "Order Placed Successfully", Toast.LENGTH_SHORT).show();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, "Failed to save order: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
+    }
+
+    private String getCurrentDate() {
+        // Return the current date in a specific format
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.getDefault());
+        return sdf.format(new Date());
+    }
+
 
     private void fetchAddress() {
         db.collection("users").document(mAuth.getCurrentUser().getUid())
@@ -133,13 +236,15 @@ public class CheckoutActivity extends AppCompatActivity {
                                             if (productDoc.exists()) {
                                                 String productName = productDoc.getString("productName");
                                                 String price = productDoc.getString("productPrice");
+                                                String productSize = productDoc.getString("productSize");
+                                                String productUnit = productDoc.getString("productUnit");
 
                                                 // Retrieve the first image URL from imageUrls list
                                                 List<String> imageUrls = (List<String>) productDoc.get("imageUrls");
                                                 String imageUrl = (imageUrls != null && !imageUrls.isEmpty()) ? imageUrls.get(0) : null;
 
                                                 // Create a new CartModel and add it to the list
-                                                CartModel cartModel = new CartModel(imageUrl, productName, price, productId, quantity);
+                                                CartModel cartModel = new CartModel(imageUrl, productName, price, productId, quantity, productUnit, productSize);
                                                 cartModelList.add(cartModel);
 
                                                 // Notify the adapter of the new data

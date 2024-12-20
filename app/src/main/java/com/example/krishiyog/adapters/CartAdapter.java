@@ -81,6 +81,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                 int price =count * Integer.parseInt(productModel.getProductPrice());
                 checkoutBinding.productName.setText(productModel.getProductName());
                 checkoutBinding.productPrice.setText("₹" + price);
+                checkoutBinding.productSize.setText("("+productModel.getSize());
+                checkoutBinding.productUnit.setText(productModel.getUnit()+")");
                 checkoutBinding.quantity.setText("Quantity (" + count + ")");
                 Glide.with(itemView.getContext())
                         .load(productModel.getImageUrls())
@@ -90,6 +92,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                 cartBinding.productName.setText(productModel.getProductName());
                 cartBinding.productPrice.setText("₹" + productModel.getProductPrice());
                 cartBinding.productQuantity.setText(String.valueOf(productModel.getQuantity()));
+                cartBinding.productSize.setText("("+productModel.getSize());
+                cartBinding.productUnit.setText(productModel.getUnit()+")");
                 Glide.with(itemView.getContext())
                         .load(productModel.getImageUrls())
                         .into(cartBinding.productImg);

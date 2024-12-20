@@ -1,0 +1,82 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".shop.OrderScreen">
+
+    <!-- Back Button -->
+    <ImageButton
+        android:id="@+id/btnBack"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@null"
+        android:src="@drawable/ic_back_black"
+        android:layout_alignParentStart="true" />
+
+    <!-- Header Text -->
+    <TextView
+        android:id="@+id/headerText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignBaseline="@id/btnBack"
+        android:text="My Orders"
+        android:textSize="20sp"
+        android:padding="10dp"
+        android:textStyle="bold"
+        android:textColor="@color/black" />
+
+    <!-- Filter Buttons -->
+    <LinearLayout
+        android:id="@+id/filterLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/headerText"
+        android:layout_marginTop="16dp"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="5dp"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnOngoing"
+            android:layout_height="40dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_marginHorizontal="5dp"
+            android:textColor="@color/white"
+            android:background="@drawable/btn_ongoing_selected"
+            android:text="Ongoing" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnDelivered"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginHorizontal="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_delivered"
+            android:text="Delivered" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnCancelled"
+            android:layout_height="40dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_marginHorizontal="5dp"
+            android:background="@drawable/btn_canceled"
+            android:text="Cancelled" />
+    </LinearLayout>
+
+    <!-- RecyclerView for Orders -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/ordersRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp"
+        android:layout_below="@id/filterLayout"
+        android:layout_marginTop="10dp" />
+
+</RelativeLayout>

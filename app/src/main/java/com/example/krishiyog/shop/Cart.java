@@ -65,6 +65,7 @@ public class Cart extends AppCompatActivity {
             i.putExtra("delivery", shippingCharges);
             i.putExtra("finalMrp", totalAmount);
             startActivity(i);
+            finish();
         });
 
         //product RecyclerView
@@ -76,7 +77,6 @@ public class Cart extends AppCompatActivity {
     private void itemRecyclerView() {
 
         binding.cartRv.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
-        binding.cartRv.hasFixedSize();
         productModelsList = new ArrayList<>();
         cartAdapter = new CartAdapter(productModelsList, this, false);
         binding.cartRv.setAdapter(cartAdapter);
@@ -108,18 +108,19 @@ public class Cart extends AppCompatActivity {
                                             if (productDoc.exists()) {
                                                 String productName = productDoc.getString("productName");
                                                 String price = productDoc.getString("productPrice");
+                                                String productSize = productDoc.getString("productSize");
+                                                String productUnit = productDoc.getString("productUnit");
 
                                                 // Retrieve the first image URL from imageUrls list
                                                 List<String> imageUrls = (List<String>) productDoc.get("imageUrls");
                                                 String imageUrl = (imageUrls != null && !imageUrls.isEmpty()) ? imageUrls.get(0) : null;
 
                                                 // Calculate total price
-                                                assert price != null;
                                                 double itemPrice = Double.parseDouble(price);
                                                 totalMRP += itemPrice * quantity; // Add the price for the quantity of this product
 
                                                 // Create a new CartModel and add it to the list
-                                                CartModel cartModel = new CartModel(imageUrl, productName, price, productId, quantity);
+                                                CartModel cartModel = new CartModel(imageUrl, productName, price, productId, quantity, productUnit, productSize);
                                                 productModelsList.add(cartModel);
 
                                                 // Notify the adapter of the new data
@@ -196,30 +197,5 @@ public class Cart extends AppCompatActivity {
         int count = productModelsList.size();
         binding.itemCount.setText("Items (" + count + ")");
 
-        // Calculate total amount
-//        totalAmount = totalMRP - discountAmount + shippingCharges;
-//
-//        binding.mrpPrice.setText("₹" + totalMRP);
-//        binding.discountAmount.setText("₹" + discountAmount);
-//        binding.shippingAmount.setText("₹" + shippingCharges);
-//        binding.totalPrice.setText("₹" + totalAmount);
-//
-//        if(productModelsList.isEmpty()){
-//            binding.mrpPrice.setText("₹0.0");
-//            binding.discountAmount.setText("₹0.0");
-//            binding.shippingAmount.setText("₹0.0");
-//            binding.totalPrice.setText("₹0.0");
-//            binding.checkoutBtn.setEnabled(false);
-//            binding.checkoutBtn.setAlpha(0.5f);
-//            Toast.makeText(this, "no product", Toast.LENGTH_SHORT).show();
-//        }
-//        else {
-//            binding.checkoutBtn.setEnabled(true);
-//        }
-//
-//
-//        // Update item count
-//        int count = productModelsList.size();
-//        binding.itemCount.setText("Items (" + count + ")");
     }
 }

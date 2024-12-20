@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import com.example.krishiyog.LoginScreen;
 import com.example.krishiyog.R;
 import com.example.krishiyog.databinding.FragmentProfileBinding;
+import com.example.krishiyog.models.OrderModel;
+import com.example.krishiyog.shop.OrderScreen;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class ProfileFragment extends Fragment {
@@ -32,6 +34,10 @@ public class ProfileFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
 
         binding.logOutBtn.setOnClickListener(view -> logout());
+        binding.myOrder.setOnClickListener(view -> {
+            Intent i = new Intent(getActivity(), OrderScreen.class);
+            startActivity(i);
+        });
 
         return binding.getRoot();
 

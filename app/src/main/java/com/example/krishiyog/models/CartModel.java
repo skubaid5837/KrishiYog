@@ -8,16 +8,36 @@ public class CartModel {
     String productPrice;
     String productId;
     int quantity;
+    String unit;
+    String size;
 
-    public CartModel(String imageUrls, String productName, String productPrice, String productId, int quantity) {
+    public CartModel(String imageUrls, String productName, String productPrice, String productId, int quantity, String unit, String size) {
         this.imageUrls = imageUrls;
         this.productName = productName;
         this.productPrice = productPrice;
         this.productId = productId;
         this.quantity = quantity;
+        this.unit = unit;
+        this.size = size;
     }
 
     public CartModel() {
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
     }
 
     public String getProductId() {
