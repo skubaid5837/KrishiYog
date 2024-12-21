@@ -122,7 +122,6 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
 
         public void bind(ProductModel productModel) {
-            //binding.image.setImageResource(productModel.getImage());
             binding.productName.setText(productModel.getProductName());
             binding.productSize.setText("("+productModel.getProductSize());
             binding.productUnit.setText(productModel.getProductUnit()+")");

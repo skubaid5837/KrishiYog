@@ -135,9 +135,6 @@ public class OrderScreen extends AppCompatActivity {
         // Update the adapter with filtered data
         adapter.updateData(filteredList);
 
-//        if (filteredList.isEmpty()) {
-//            Toast.makeText(this, "No orders found for " + status, Toast.LENGTH_SHORT).show();
-//        }
     }
 
     private void resetButtonBackground(AppCompatButton button) {
