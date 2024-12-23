@@ -15,6 +15,13 @@
         android:theme="@style/Theme.KrishiYog"
         tools:targetApi="31">
         <activity
+            android:name=".community.ImagePreviewActivity"
+            android:exported="false" />
+        <activity
+            android:name=".community.ViewPostScreen"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
             android:name=".community.AddPostScreen"
             android:exported="false" />
         <activity

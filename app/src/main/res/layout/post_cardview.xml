@@ -62,7 +62,7 @@
                 android:paddingHorizontal="4dp"
                 android:layout_marginBottom="10dp"
                 android:textColor="@color/secondaryBlack"
-                android:gravity="end"/>
+                android:gravity="end" />
 
         </LinearLayout>
 
@@ -76,7 +76,6 @@
             android:text="Anyone want to trade some of my extra roma tomatoes for other produce?"
             android:textColor="@color/secondaryBlack"
             android:textSize="14sp" />
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -131,19 +130,17 @@
                     android:id="@+id/like_icon"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:padding="5dp"
-                    android:src="@drawable/ic_like" />
+                    android:src="@drawable/ic_like_white" />
 
                 <TextView
                     android:id="@+id/like_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="12"
+                    android:text="14"
                     android:textColor="@color/primary"
-                    android:textSize="14sp"
+                    android:textSize="16sp"
                     android:layout_marginStart="4dp" />
             </LinearLayout>
-
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -173,8 +170,37 @@
                     android:textColor="@color/white"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
-
             </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+
+        <!-- Comment Section -->
+        <LinearLayout
+            android:id="@+id/commentSection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:elevation="2dp"
+            android:visibility="gone"
+            android:layout_marginTop="8dp"
+            android:gravity="center_vertical">
+
+            <EditText
+                android:id="@+id/commentInput"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Write a comment..."
+                android:background="@drawable/comment_input_background"
+                android:padding="8dp"
+                android:textSize="14sp" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/sendComment"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="@drawable/send"
+                app:backgroundTint="#ABC759"
+                android:layout_marginStart="8dp" />
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>
