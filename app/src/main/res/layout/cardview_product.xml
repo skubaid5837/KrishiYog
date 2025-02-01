@@ -11,7 +11,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:id="@+id/cardView">
 
         <!-- Product Image -->
         <com.google.android.material.imageview.ShapeableImageView
@@ -21,7 +22,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:scaleType="centerCrop"
+            android:scaleType="center"
             android:src="@drawable/img1"
             app:layout_constraintBottom_toTopOf="@+id/productName"
             app:layout_constraintEnd_toEndOf="parent"
@@ -33,13 +34,15 @@
         <TextView
             android:id="@+id/productName"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="20dp"
             android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
+            android:gravity="start"
+            android:paddingEnd="4dp"
             android:text="Product Name"
             android:textColor="@color/tertiaryBlack"
             android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/image"
+            app:layout_constraintStart_toStartOf="@id/image"
             app:layout_constraintTop_toBottomOf="@+id/image" />
 
         <!-- Description -->
@@ -48,13 +51,12 @@
             android:id="@+id/productSize"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="4dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="2dp"
             android:text="Quantity"
             android:textColor="@color/black"
             android:textSize="12sp"
-            app:layout_constraintLeft_toRightOf="@+id/productName"
-            app:layout_constraintTop_toBottomOf="@+id/image" />
+            app:layout_constraintLeft_toLeftOf="@id/productName"
+            app:layout_constraintTop_toBottomOf="@+id/productName" />
 
         <!-- Product Price and Rating -->
 
@@ -62,32 +64,31 @@
             android:id="@+id/productUnit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:paddingHorizontal="4dp"
+            android:layout_marginTop="2dp"
+            android:paddingHorizontal="2dp"
             android:text="Unit"
             android:textColor="@color/black"
             android:textSize="12sp"
             app:layout_constraintLeft_toRightOf="@id/productSize"
-            app:layout_constraintTop_toBottomOf="@+id/image" />
+            app:layout_constraintTop_toBottomOf="@+id/productName" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_marginTop="4dp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/productName">
+            app:layout_constraintLeft_toLeftOf="@id/productSize"
+            app:layout_constraintTop_toBottomOf="@+id/productUnit">
 
             <!-- Price -->
             <TextView
                 android:id="@+id/productPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
+                android:layout_marginStart="16dp"
                 android:text="$10"
-                android:textColor="@color/tertiaryBlack"
+                android:textColor="@color/primary"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 

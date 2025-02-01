@@ -139,7 +139,7 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             }
 
             // Set the click listener
-            binding.image.setOnClickListener(view -> {
+            binding.cardView.setOnClickListener(view -> {
                 Intent i = new Intent(view.getContext(), ProductDescription.class);
 
                 //Sending the product data to next activity

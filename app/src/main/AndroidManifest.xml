@@ -15,6 +15,9 @@
         android:theme="@style/Theme.KrishiYog"
         tools:targetApi="31">
         <activity
+            android:name=".chatBot.ChatBotScreen"
+            android:exported="false" />
+        <activity
             android:name=".community.ImagePreviewActivity"
             android:exported="false" />
         <activity

@@ -18,9 +18,8 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/navbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="70dp"
         android:elevation="10dp"
-        android:layout_marginBottom="-50dp"
         app:labelVisibilityMode="labeled"
         app:itemTextColor="@color/white"
         app:itemRippleColor="@color/secondary"

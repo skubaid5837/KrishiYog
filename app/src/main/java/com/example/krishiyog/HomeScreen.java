@@ -85,7 +85,7 @@ public class HomeScreen extends AppCompatActivity {
     }
 
     private void resetIcons() {
-        binding.navbar.getMenu().findItem(R.id.nav_home).setIcon(R.drawable.ic_home);
+        binding.navbar.getMenu().findItem(R.id.nav_shop).setIcon(R.drawable.ic_home);
         binding.navbar.getMenu().findItem(R.id.nav_shop).setIcon(R.drawable.ic_shop);
         binding.navbar.getMenu().findItem(R.id.nav_scan).setIcon(R.drawable.ic_scan);
         binding.navbar.getMenu().findItem(R.id.nav_community).setIcon(R.drawable.ic_community);
@@ -113,8 +113,8 @@ public class HomeScreen extends AppCompatActivity {
 
         // Check if the current fragment is ShopFragment
         if (currentFragment instanceof ShopFragment) {
-            // Replace ShopFragment with HomeFragment
-            loadFragment(new HomeFragment(), true);
+            // Replace Community with Shop Fragment
+            loadFragment(new ShopFragment(), true);
             // Update the BottomNavigationView to select the Home item
             binding.navbar.setSelectedItemId(R.id.nav_home);
         } else {

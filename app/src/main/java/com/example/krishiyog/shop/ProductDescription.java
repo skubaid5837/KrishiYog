@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.denzcoskun.imageslider.constants.ScaleTypes;
 import com.denzcoskun.imageslider.models.SlideModel;
 import com.example.krishiyog.R;
+import com.example.krishiyog.community.ImagePreviewActivity;
 import com.example.krishiyog.databinding.ActivityProductDescriptionBinding;
 import com.example.krishiyog.models.ProductModel;
 import com.google.firebase.auth.FirebaseAuth;
@@ -43,14 +44,8 @@ public class ProductDescription extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         binding = ActivityProductDescriptionBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
 
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
@@ -64,6 +59,10 @@ public class ProductDescription extends AppCompatActivity {
         binding.btnIncreaseQuantity.setOnClickListener(view -> {
             currentQuantity++;
             updateCurrentQuantity();
+        });
+
+        binding.productImage.setOnClickListener(view -> {
+            Intent i = new Intent(this, ImagePreviewActivity.class);
         });
 
         binding.btnDecreaseQuantity.setOnClickListener(view -> {

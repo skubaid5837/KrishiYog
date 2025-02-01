@@ -11,6 +11,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.krishiyog.databinding.ActivityWelcomeScreenBinding;
+import com.example.krishiyog.fragments.ShopFragment;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class WelcomeScreen extends AppCompatActivity {

@@ -53,6 +53,7 @@ dependencies {
     implementation("com.github.denzcoskun:ImageSlideshow:0.1.2")
     implementation("com.github.bumptech.glide:glide:4.13.2")
     implementation("androidx.viewpager2:viewpager2:1.0.0")
+    implementation("com.android.volley:volley:1.2.1")
     implementation(libs.photoview)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
