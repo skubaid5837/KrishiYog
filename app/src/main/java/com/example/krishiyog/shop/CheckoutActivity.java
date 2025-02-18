@@ -70,7 +70,7 @@ public class CheckoutActivity extends AppCompatActivity {
 
         binding.originalPrice.setText("₹" + i.getDoubleExtra("totalMrp", 0.0));
         binding.deliveryPrice.setText("₹" + i.getDoubleExtra("delivery", 0.0));
-        binding.discountPrice.setText("₹" + i.getDoubleExtra("discount", 0.0));
+        binding.discountPrice.setText("₹" + String.format("%.2f", i.getDoubleExtra("discount", 0.0)));
         binding.totalPrice.setText("₹" + i.getDoubleExtra("finalMrp", 0.0));
 
         //product RecyclerView

@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,10 +28,12 @@ import com.example.krishiyog.adapters.CommentAdapter;
 import com.example.krishiyog.databinding.ActivityViewPostScreenBinding;
 import com.example.krishiyog.models.CommentModel;
 import com.example.krishiyog.models.PostModel;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ViewPostScreen extends AppCompatActivity {
@@ -59,11 +62,64 @@ public class ViewPostScreen extends AppCompatActivity {
         Intent intent = getIntent();
         postId = intent.getStringExtra("postId");
 
+        binding.backBtn.setOnClickListener(view -> {
+            onBackPressed();
+        });
+
+        binding.sendComment.setOnClickListener(view -> {
+            String comment = binding.commentInput.getText().toString().trim();
+            if (!comment.isEmpty()) {
+                sendCommentToDatabase(postId, comment); // Your function to save comment
+                binding.commentInput.setText(""); // Clear input
+                binding.commentSection.setVisibility(View.GONE);
+            }
+        });
+
         //bind data
         getPostData();
 
         //Recycler View
         setRecyclerView();
+    }
+
+    private void sendCommentToDatabase(String postId, String comment) {
+        FirebaseFirestore db =FirebaseFirestore.getInstance();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        String userId = mAuth.getCurrentUser().getUid();
+        db.collection("users")
+                .document(userId)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    String userName = documentSnapshot.getString("name");
+                    // Generate unique ID
+                    String commentId = db.collection("posts").document().collection("comments").document().getId();
+
+                    CommentModel commentModel = new CommentModel(commentId, userId, userName, "Mumbai", comment, String.valueOf(new Date()),"2","1");
+
+                    db.collection("posts").document(postId)
+                            .collection("comments").document(commentId)
+                            .set(commentModel)
+                            .addOnSuccessListener(documentReference -> {
+                                // ✅ Update UI Immediately After Comment is Added
+                                commentModelList.add(0, commentModel); // Add new comment at the top
+                                commentAdapter.notifyItemInserted(0); // Notify adapter of the new comment
+                                binding.commentRv.smoothScrollToPosition(0); // Scroll to top
+
+                                // Clear input field and hide keyboard
+                                binding.commentInput.setText("");
+                                binding.commentSection.setVisibility(View.GONE);
+                                hideKeyboard();
+                            });
+
+                });
+    }
+
+    // Hide Keyboard Function
+    private void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.hideSoftInputFromWindow(binding.commentInput.getWindowToken(), 0);
+        }
     }
 
     private void setRecyclerView() {

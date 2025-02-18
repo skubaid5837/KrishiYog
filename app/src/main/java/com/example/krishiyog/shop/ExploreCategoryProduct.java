@@ -43,6 +43,10 @@ public class ExploreCategoryProduct extends AppCompatActivity {
 
         String categoryName = getIntent().getStringExtra("categoryName");
 
+        binding.backArrow.setOnClickListener(view -> {
+            onBackPressed();
+        });
+
         if (categoryName != null) {
             fetchProductsByCategory(categoryName);
             binding.title.setText(categoryName);

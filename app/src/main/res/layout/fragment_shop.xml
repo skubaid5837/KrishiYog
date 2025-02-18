@@ -33,7 +33,7 @@
                     android:textColor="@color/primaryBlack"
                     android:textSize="28sp"
                     android:textStyle="bold"
-                    android:text="Hi, Lucifer"/>
+                    android:text="Hi, Krishi"/>
 
                 <ImageView
                     android:id="@+id/cartBtn"

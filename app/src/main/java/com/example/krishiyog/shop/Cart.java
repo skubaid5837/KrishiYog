@@ -189,7 +189,7 @@ public class Cart extends AppCompatActivity {
 
         // Update UI fields
         binding.mrpPrice.setText("₹" + totalMRP);
-        binding.discountAmount.setText("₹" + discountAmount);
+        binding.discountAmount.setText("₹" + String.format("%.2f", discountAmount));
         binding.shippingAmount.setText("₹" + shippingCharges);
         binding.totalPrice.setText("₹" + totalAmount);
 

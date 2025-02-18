@@ -3,27 +3,29 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="8dp">
+    android:padding="4dp">
+        <!-- Received Message Layout -->
+        <TextView
+            android:id="@+id/botMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="64dp"
+            android:background="@drawable/bg_received_message"
+            android:padding="12dp"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:visibility="gone" />
 
-    <!-- User Message -->
-    <TextView
-        android:id="@+id/user_message"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/user_message_background"
-        android:padding="12dp"
-        android:layout_gravity="end"
-        android:textColor="#FFFFFF"
-        android:visibility="gone" />
-
-    <!-- Bot Message -->
-    <TextView
-        android:id="@+id/bot_message"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bot_message_background"
-        android:padding="12dp"
-        android:layout_gravity="start"
-        android:textColor="#000000"
-        android:visibility="gone" />
+        <!-- Sent Message Layout -->
+        <TextView
+            android:id="@+id/userMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:textSize="16sp"
+            android:layout_marginStart="64dp"
+            android:background="@drawable/bg_sent_message"
+            android:padding="12dp"
+            android:textColor="@color/black"
+            android:visibility="gone" />
 </LinearLayout>

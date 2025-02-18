@@ -87,29 +87,32 @@
             android:layout_gravity="center_vertical"
             android:orientation="vertical">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <!-- Name -->
                 <TextView
                     android:id="@+id/productName"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
                     android:text="Beverage Name"
                     android:textColor="@color/black"
                     android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <!-- Description -->
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toStartOf="@+id/productSize"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <!-- Description -->
                 <TextView
                     android:id="@+id/productSize"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
+                    app:layout_constraintEnd_toStartOf="@+id/productUnit"
+                    app:layout_constraintTop_toTopOf="@+id/productPrice"
+                    app:layout_constraintBottom_toBottomOf="@+id/productPrice"
                     android:text="Quantity"
                     android:textColor="@color/black"
                     android:textSize="12sp" />
@@ -118,12 +121,27 @@
                     android:id="@+id/productUnit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
+                    app:layout_constraintEnd_toStartOf="@+id/productPrice"
+                    app:layout_constraintTop_toTopOf="@+id/productPrice"
+                    app:layout_constraintBottom_toBottomOf="@+id/productPrice"
+                    android:layout_marginEnd="4dp"
                     android:text="Unit"
                     android:textColor="@color/black"
                     android:textSize="12sp" />
 
-            </LinearLayout>
+                <TextView
+                    android:id="@+id/productPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:text="₹100"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
                 android:id="@+id/quantity"
@@ -139,19 +157,7 @@
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/productPrice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="₹100"
-            android:layout_gravity="bottom"
-            android:textStyle="bold"
-            android:padding="10dp"
-            android:layout_marginTop="10dp"
-            app:layout_constraintTop_toBottomOf="@+id/line1"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:textColor="@color/black"
-            android:textSize="16sp" />
+
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/cancelBtn"
@@ -160,7 +166,6 @@
             android:text="Cancel"
             android:textSize="10sp"
             android:textColor="@color/white"
-            app:layout_constraintTop_toBottomOf="@+id/productPrice"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             android:layout_marginTop="10dp"

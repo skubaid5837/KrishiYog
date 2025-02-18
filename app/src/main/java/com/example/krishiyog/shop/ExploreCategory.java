@@ -62,6 +62,10 @@ public class ExploreCategory extends AppCompatActivity {
             return insets;
         });
 
+        binding.backBtn.setOnClickListener(view -> {
+            onBackPressed();
+        });
+
         //Category Recycler View
         categoryRecyclerView();
 

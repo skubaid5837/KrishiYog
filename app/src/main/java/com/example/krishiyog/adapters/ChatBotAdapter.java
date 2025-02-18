@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.krishiyog.databinding.ChatBotCardviewBinding;
+import com.example.krishiyog.databinding.TestBinding;
 import com.example.krishiyog.models.ChatBotModel;
 
 import java.util.ArrayList;
@@ -51,9 +52,9 @@ public class ChatBotAdapter extends RecyclerView.Adapter<ChatBotAdapter.ViewHold
         return chatBotModelList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder{
 
-        private ChatBotCardviewBinding binding;
+        private final ChatBotCardviewBinding binding;
 
         public ViewHolder(ChatBotCardviewBinding binding) {
             super(binding.getRoot());

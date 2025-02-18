@@ -1,10 +1,7 @@
 package com.example.krishiyog;
 import android.os.Bundle;
-import android.view.MenuItem;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -15,8 +12,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.krishiyog.databinding.ActivityHomeScreenBinding;
 import com.example.krishiyog.fragments.CommunityFragment;
-import com.example.krishiyog.fragments.HomeFragment;
 import com.example.krishiyog.fragments.ProfileFragment;
+import com.example.krishiyog.fragments.ScanFragment;
 import com.example.krishiyog.fragments.ShopFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -44,7 +41,7 @@ public class HomeScreen extends AppCompatActivity {
 
         //Set default Fragment.
         if (savedInstanceState == null) {
-            loadFragment(new HomeFragment(), true); // Load default fragment
+            loadFragment(new ShopFragment(), true); // Load default fragment
         }
 
         binding.navbar.setOnItemSelectedListener(item -> {
@@ -53,18 +50,19 @@ public class HomeScreen extends AppCompatActivity {
 
             int itemId = item.getItemId();
 
-            if (itemId == R.id.nav_home) {
-                binding.navbar.getMenu().findItem(R.id.nav_home).setIcon(R.drawable.ic_home_fill);
-                loadFragment(new HomeFragment(), true);
-                return true;
-            }
-            else if (itemId == R.id.nav_shop) {
+//            if (itemId == R.id.nav_home) {
+//                binding.navbar.getMenu().findItem(R.id.nav_home).setIcon(R.drawable.ic_home_fill);
+//                loadFragment(new HomeFragment(), true);
+//                return true;
+//            }
+            if (itemId == R.id.nav_shop) {
                 binding.navbar.getMenu().findItem(R.id.nav_shop).setIcon(R.drawable.ic_shop_filled);
                 loadFragment(new ShopFragment(), true);
                 return true;
             }
             else if (itemId == R.id.nav_scan) {
                 binding.navbar.getMenu().findItem(R.id.nav_scan).setIcon(R.drawable.ic_scan);
+                loadFragment(new ScanFragment(), true);
                 return true;
             }
             else if (itemId == R.id.nav_community) {
@@ -85,7 +83,7 @@ public class HomeScreen extends AppCompatActivity {
     }
 
     private void resetIcons() {
-        binding.navbar.getMenu().findItem(R.id.nav_shop).setIcon(R.drawable.ic_home);
+        //binding.navbar.getMenu().findItem(R.id.nav_shop).setIcon(R.drawable.ic_home);
         binding.navbar.getMenu().findItem(R.id.nav_shop).setIcon(R.drawable.ic_shop);
         binding.navbar.getMenu().findItem(R.id.nav_scan).setIcon(R.drawable.ic_scan);
         binding.navbar.getMenu().findItem(R.id.nav_community).setIcon(R.drawable.ic_community);
@@ -112,11 +110,11 @@ public class HomeScreen extends AppCompatActivity {
         Fragment currentFragment = fragmentManager.findFragmentById(R.id.frame1);
 
         // Check if the current fragment is ShopFragment
-        if (currentFragment instanceof ShopFragment) {
+        if (currentFragment instanceof CommunityFragment) {
             // Replace Community with Shop Fragment
             loadFragment(new ShopFragment(), true);
             // Update the BottomNavigationView to select the Home item
-            binding.navbar.setSelectedItemId(R.id.nav_home);
+            binding.navbar.setSelectedItemId(R.id.nav_shop);
         } else {
             // If not ShopFragment, use default back press behavior
             super.onBackPressed();

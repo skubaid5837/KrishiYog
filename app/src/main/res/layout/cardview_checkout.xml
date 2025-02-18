@@ -32,17 +32,21 @@
             android:layout_gravity="center_vertical"
             android:orientation="vertical">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <!-- Name -->
                 <TextView
                     android:id="@+id/productName"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/productSize"
+                    app:layout_constraintTop_toTopOf="parent"
                     android:maxLines="1"
                     android:text="Beverage Name"
+                    android:layout_marginEnd="4dp"
                     android:textColor="@color/black"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -56,6 +60,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
                     android:text="Quantity"
+                    app:layout_constraintEnd_toStartOf="@+id/productUnit"
+                    app:layout_constraintTop_toTopOf="@+id/productPrice"
+                    app:layout_constraintBottom_toBottomOf="@+id/productPrice"
                     android:textColor="@color/black"
                     android:textSize="12sp" />
 
@@ -63,12 +70,27 @@
                     android:id="@+id/productUnit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="4dp"
+                    app:layout_constraintEnd_toStartOf="@+id/productPrice"
+                    app:layout_constraintTop_toTopOf="@+id/productPrice"
+                    app:layout_constraintBottom_toBottomOf="@+id/productPrice"
                     android:text="Unit"
                     android:textColor="@color/black"
                     android:textSize="12sp" />
 
-            </LinearLayout>
+                <TextView
+                    android:id="@+id/productPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:text="₹100"
+                    android:textStyle="bold"
+                    android:layout_gravity="end"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
                 android:id="@+id/quantity"
@@ -79,23 +101,6 @@
                 android:textColor="@color/secondaryBlack"
                 android:layout_marginTop="4dp" />
 
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/productPrice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="₹100"
-                android:textStyle="bold"
-                android:layout_gravity="end"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
 
         </LinearLayout>
 

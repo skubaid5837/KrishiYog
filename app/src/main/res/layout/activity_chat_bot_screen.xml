@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F2F2F2"
+    android:windowSoftInputMode="adjustResize"
     tools:context=".chatBot.ChatBotScreen">
 
     <!-- Header -->
@@ -49,33 +50,31 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="16dp"
+        android:padding="10dp"
+        android:background="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/textView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
+        <EditText
+            android:id="@+id/message"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="4">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/message"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/comment_input_background"
-                android:hint="Message slothGPT..." />
-
-        </com.google.android.material.textfield.TextInputLayout>
+            android:layout_weight="1"
+            android:background="@drawable/bg_message_input"
+            android:inputType="text"
+            android:hint="Type a message"
+            android:imeOptions="actionSend"
+            android:padding="12dp"
+            android:maxLines="1"/>
 
         <ImageButton
             android:id="@+id/sendBtn"
-            android:layout_width="45dp"
+            android:layout_width="50dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:layout_gravity="center"
+            android:background="@color/white"
             android:layout_margin="5dp"
-            android:background="#F2F2F2"
             android:src="@drawable/send"/>
 
     </LinearLayout>
@@ -91,7 +90,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:padding="10dp"
         android:background="@color/white"
-        android:text="slothGPT can make mistakes. Check our Terms &amp; Conditions."
+        android:text="KrishiGPT can make mistakes. Check our Terms &amp; Conditions."
         android:textColor="@color/secondaryBlack"
         android:textSize="12sp" />
 

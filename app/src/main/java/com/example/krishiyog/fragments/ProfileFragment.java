@@ -54,12 +54,26 @@ public class ProfileFragment extends Fragment {
             startActivity(i);
         });
 
-        binding.chatBot.setOnClickListener(view -> {
-            startActivity(new Intent(getContext(), ChatBotScreen.class));
-        });
+        bindData();
+
 
         return binding.getRoot();
 
+    }
+
+    private void bindData() {
+        db.collection("users")
+                .document(mAuth.getCurrentUser().getUid())
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        String email = documentSnapshot.getString("email");
+                        String userName = documentSnapshot.getString("name");
+
+                        binding.profileEmail.setText(email);
+                        binding.profileName.setText(userName);
+                    }
+                });
     }
 
 //    private void test() {

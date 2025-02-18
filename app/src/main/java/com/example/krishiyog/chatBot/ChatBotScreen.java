@@ -1,7 +1,16 @@
 package com.example.krishiyog.chatBot;
 
+import android.content.Context;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewTreeObserver;
+import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -35,8 +44,9 @@ public class ChatBotScreen extends AppCompatActivity {
     ActivityChatBotScreenBinding binding;
     private ArrayList<ChatBotModel> chatBotModelArrayList;
     private ChatBotAdapter chatBotAdapter;
+    private boolean isKeyboardVisible = false;
 
-    private static final String OPENAI_API_KEY = "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";
+    private static final String OPENAI_API_KEY = "";
     private static final String OPENAI_API_URL = "https://api.openai.com/v1/chat/completions";
 
     @Override
@@ -51,29 +61,157 @@ public class ChatBotScreen extends AppCompatActivity {
             return insets;
         });
 
+        // Setup keyboard visibility listener
+        setupKeyboardVisibilityListener();
+
+        // Setup message input handling
+        setupMessageInput();
+
         chatBotModelArrayList = new ArrayList<>();
         chatBotAdapter = new ChatBotAdapter(chatBotModelArrayList);
 
         binding.chatRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         binding.chatRecyclerView.setAdapter(chatBotAdapter);
 
-        binding.sendBtn.setOnClickListener(view -> {
-            String userMessage = binding.message.getText().toString().trim();
+        // Move click listener setup to separate method
+        setupSendButton();
 
-            if (TextUtils.isEmpty(userMessage)) {
-                Toast.makeText(this, "Please enter a message", Toast.LENGTH_SHORT).show();
-                return;
+    }
+
+    private void setupSendButton() {
+        binding.sendBtn.setOnClickListener(view -> handleSendMessage());
+    }
+
+    private void setupMessageInput() {
+        binding.message.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEND ||
+                    (event != null &&
+                            event.getKeyCode() == KeyEvent.KEYCODE_ENTER &&
+                            event.getAction() == KeyEvent.ACTION_DOWN)) {
+
+                handleSendMessage();
+                return true;
             }
+            return false;
+        });
+    }
 
-            // Add user message to RecyclerView
-            addMessageToChat(userMessage, true);
-            binding.message.setText("");
+    private void handleSendMessage() {
+        String userMessage = binding.message.getText().toString().trim();
 
-            // Fetch chatbot response
-            fetchChatBotResponse(userMessage);
+        if (TextUtils.isEmpty(userMessage)) {
+            Toast.makeText(this, "Please enter a message", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
+        // Add user message to RecyclerView
+        addMessageToChat(userMessage, true);
+        binding.message.setText("");
+
+        // Hide keyboard after sending
+        hideKeyboard();
+
+        // Reset translations with animation
+        binding.bottomLayout.animate()
+                .translationY(0)
+                .setDuration(200)
+                .start();
+        binding.chatRecyclerView.animate()
+                .translationY(0)
+                .setDuration(200)
+                .start();
+
+        // Fetch chatbot response
+        fetchChatBotResponse(userMessage);
+    }
+
+    private void setupKeyboardVisibilityListener() {
+        // Store original position
+        binding.getRoot().getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                Rect r = new Rect();
+                binding.getRoot().getWindowVisibleDisplayFrame(r);
+                int screenHeight = binding.getRoot().getRootView().getHeight();
+                int keyboardHeight = screenHeight - r.bottom;
+
+                // If keyboard height is more than 15% of screen height,
+                // consider keyboard as visible
+                boolean isKeyboardNowVisible = keyboardHeight > screenHeight * 0.15;
+
+                if (isKeyboardNowVisible != isKeyboardVisible) {
+                    isKeyboardVisible = isKeyboardNowVisible;
+
+                    if (isKeyboardVisible) {
+                        // Keyboard is being shown
+                        binding.bottomLayout.setTranslationY(-keyboardHeight);
+                        binding.chatRecyclerView.setTranslationY(-keyboardHeight);
+                        scrollToBottom();
+                    } else {
+                        // Keyboard is being hidden
+                        binding.bottomLayout.animate()
+                                .translationY(0)
+                                .setDuration(200)
+                                .start();
+                        binding.chatRecyclerView.animate()
+                                .translationY(0)
+                                .setDuration(200)
+                                .start();
+                    }
+                }
+            }
         });
 
+        // Handle focus changes
+        binding.message.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) {
+                // Reset translation when focus is lost
+                binding.bottomLayout.animate()
+                        .translationY(0)
+                        .setDuration(200)
+                        .start();
+                binding.chatRecyclerView.animate()
+                        .translationY(0)
+                        .setDuration(200)
+                        .start();
+            }
+        });
+
+        // Handle touch events
+        binding.message.setOnTouchListener((view, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                if (!isKeyboardVisible) {
+                    // Show keyboard if it's not visible
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.showSoftInput(binding.message, InputMethodManager.SHOW_IMPLICIT);
+                }
+            }
+            return false;
+        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (isKeyboardVisible) {
+            // If keyboard is visible, hide it first
+            hideKeyboard();
+            binding.bottomLayout.animate()
+                    .translationY(0)
+                    .setDuration(200)
+                    .start();
+            binding.chatRecyclerView.animate()
+                    .translationY(0)
+                    .setDuration(200)
+                    .start();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    private void scrollToBottom() {
+        if (chatBotModelArrayList.size() > 0) {
+            binding.chatRecyclerView.smoothScrollToPosition(chatBotModelArrayList.size() - 1);
+        }
     }
 
     private void addMessageToChat(String userMessage, boolean b) {
@@ -110,8 +248,7 @@ public class ChatBotScreen extends AppCompatActivity {
                             JSONArray choices = response.getJSONArray("choices");
                             JSONObject choice = choices.getJSONObject(0);
                             String botReply = choice.getJSONObject("message").getString("content");
-                            Toast.makeText(ChatBotScreen.this, botReply, Toast.LENGTH_SHORT).show();
-
+                            // Toast.makeText(ChatBotScreen.this, botReply, Toast.LENGTH_SHORT).show();
                             // Add chatbot response to RecyclerView
                             addMessageToChat(botReply, false);
                         } catch (JSONException e) {
@@ -145,4 +282,12 @@ public class ChatBotScreen extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(jsonObjectRequest);
     }
+
+    private void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.hideSoftInputFromWindow(binding.message.getWindowToken(), 0);
+        }
+    }
+
 }
