@@ -17,6 +17,7 @@ import com.example.krishiyog.shop.ProductDescription;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -66,9 +67,10 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         public void bind(ProductModel productModel) {
             binding.productName.setText(productModel.getProductName());
             binding.productPrice.setText("₹"+productModel.getProductPrice());
-            Glide.with(itemView.getContext())
-                    .load(productModel.getImageUrls().get(0))
-                    .into(binding.productImg);
+//            Glide.with(itemView.getContext())
+//                    .load(productModel.getImageUrls().get(0))
+//                    .into(binding.productImg);
+            Picasso.get().load(productModel.getImageUrls().get(0)).into(binding.productImg);
 
             binding.product.setOnClickListener(view -> {
                 Intent i = new Intent(itemView.getContext(), ProductDescription.class);

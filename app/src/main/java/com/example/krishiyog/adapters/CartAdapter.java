@@ -17,6 +17,8 @@ import com.example.krishiyog.models.CartModel;
 import com.example.krishiyog.shop.Cart;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
@@ -84,9 +86,10 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                 checkoutBinding.productSize.setText("("+productModel.getSize());
                 checkoutBinding.productUnit.setText(productModel.getUnit()+")");
                 checkoutBinding.quantity.setText("Quantity (" + count + ")");
-                Glide.with(itemView.getContext())
-                        .load(productModel.getImageUrls())
-                        .into(checkoutBinding.productImage);
+                Picasso.get().load(productModel.getImageUrls()).into(checkoutBinding.productImage);
+//                Glide.with(itemView.getContext())
+//                        .load(productModel.getImageUrls())
+//                        .into(checkoutBinding.productImage);
             } else {
                 // Bind data for Cart Activity
                 cartBinding.productName.setText(productModel.getProductName());
@@ -94,9 +97,10 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                 cartBinding.productQuantity.setText(String.valueOf(productModel.getQuantity()));
                 cartBinding.productSize.setText("("+productModel.getSize());
                 cartBinding.productUnit.setText(productModel.getUnit()+")");
-                Glide.with(itemView.getContext())
-                        .load(productModel.getImageUrls())
-                        .into(cartBinding.productImg);
+                Picasso.get().load(productModel.getImageUrls()).into(cartBinding.productImg);
+//                Glide.with(itemView.getContext())
+//                        .load(productModel.getImageUrls())
+//                        .into(cartBinding.productImg);
 
                 // Handle cart-specific actions
                 cartBinding.plusBtn.setOnClickListener(view -> {

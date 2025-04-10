@@ -15,6 +15,10 @@
     <style name="fab_rounded">
         <item name="cornerSize">50%</item>
     </style>
+    <style name="CircleImageView">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
 
     <style name="CustomActiveIndicator">
         <!-- Customize the active indicator here -->

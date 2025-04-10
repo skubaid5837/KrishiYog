@@ -1,4 +1,5 @@
 package com.example.krishiyog.adapters;
+
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -20,6 +21,7 @@ import com.example.krishiyog.models.OrderModel;
 import com.example.krishiyog.models.PostModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -133,9 +135,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                     itemView.getContext().startActivity(i);
                 });
 
-                Glide.with(itemView.getContext())
-                        .load(postModel.getProfileImage())
-                        .into(binding.profileImage);
+//                Glide.with(itemView.getContext())
+//                        .load(postModel.getProfileImage())
+//                        .into(binding.profileImage);
+                Picasso.get().load(postModel.getProfileImage()).into(binding.profileImage);
 
                 // Check if imageUrl is null before accessing it
                 ImageView[] imageViews = {binding.image1, binding.image2, binding.image3};
@@ -146,9 +149,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                     for (int i = 0; i < imageViews.length; i++) {
                         if (i < postModel.getImages().size()) {
                             // Load the image if it exists
-                            Glide.with(itemView.getContext())
-                                    .load(postModel.getImages().get(i))
-                                    .into(imageViews[i]);
+//                            Glide.with(itemView.getContext())
+//                                    .load(postModel.getImages().get(i))
+//                                    .into(imageViews[i]);
+                            Picasso.get().load(postModel.getImages().get(i)).into(imageViews[i]);
                             imageViews[i].setVisibility(View.VISIBLE); // Make sure it's visible
 
                             // Create a final variable for the current index

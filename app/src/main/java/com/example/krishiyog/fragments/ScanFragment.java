@@ -147,7 +147,7 @@ public class ScanFragment extends Fragment {
 
 
     private void uploadImage() {
-        String apiKey = "";
+        String apiKey = "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";
         String authorization = "Bearer " + apiKey;
         if (binding.imageView.getDrawable() == null) {
             Toast.makeText(getContext(), "Please select an image first", Toast.LENGTH_SHORT).show();
@@ -245,9 +245,8 @@ public class ScanFragment extends Fragment {
                             JSONObject json = new JSONObject(jsonString);
                             String disease = json.getString("disease");
                             String precautions = json.getString("precautions");
-
-                            String result = "Disease: " + disease + "\n\nPrecautions: " + precautions;
-                            showResult(result);
+                            String result = "Disease: " + disease;
+                            showResult(result, disease);
                         } catch (Exception e) {
                             Log.e("APIError", "Error parsing response: " + e.getMessage());
                             Toast.makeText(getContext(), "Error analyzing image: " + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -276,10 +275,24 @@ public class ScanFragment extends Fragment {
         }
     }
 
-    private void showResult(String result) {
+    private void showResult(String result, String disease) {
         // You can customize how to display the result
         // For now, using Toast for demonstration
         binding.diseaseName.setText(result);
+        if (!disease.equalsIgnoreCase("Unknown")){
+            binding.askBot.setVisibility(View.VISIBLE);
+        }
+        binding.askBot.setOnClickListener(view -> {
+            redirectToBot(disease);
+        });
+
+    }
+
+    private void redirectToBot(String disease) {
+        Intent i = new Intent(getContext(), ChatBotScreen.class);
+        i.putExtra("disease", disease);
+        i.putExtra("isTrue", "1");
+        startActivity(i);
     }
 
     private String extractJson(String response) {

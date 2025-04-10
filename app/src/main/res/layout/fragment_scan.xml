@@ -19,31 +19,44 @@
             android:background="@android:color/darker_gray"
             android:scaleType="centerCrop"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent" />
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnGallery"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/linear2"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/btn_primary"
-            android:text="Pick from Gallery"
-            android:textColor="@color/text_shadow_white"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView" />
+            app:layout_constraintEnd_toEndOf="parent"
+            android:weightSum="2"
+            android:padding="4dp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintTop_toBottomOf="@+id/imageView" >
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnCamera"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/btn_primary"
-            android:text="Capture from Camera"
-            android:textColor="@color/text_shadow_white"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnGallery" />
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnGallery"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/btn_primary"
+                android:text="Open Gallery"
+                android:layout_marginEnd="4dp"
+                android:textSize="12sp"
+                android:layout_weight="1"
+                android:textColor="@color/text_shadow_white"
+                />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnCamera"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="12sp"
+                android:layout_marginStart="4dp"
+                android:background="@drawable/btn_primary"
+                android:text="Open Camera"
+                android:textColor="@color/text_shadow_white"/>
+
+        </LinearLayout>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnDetect"
@@ -56,7 +69,7 @@
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnCamera" />
+            app:layout_constraintTop_toBottomOf="@+id/linear2" />
 
         <TextView
             android:id="@+id/diseaseName"
@@ -68,6 +81,18 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btnDetect" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/askBot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_primary"
+            android:text="Click here for more information"
+            app:layout_constraintTop_toBottomOf="@+id/diseaseName"
+            app:layout_constraintStart_toStartOf="parent"
+            android:textColor="@color/text_shadow_white"
+            android:visibility="gone"
+            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

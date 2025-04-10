@@ -15,6 +15,7 @@ import com.example.krishiyog.databinding.ExploreCardViewBinding;
 import com.example.krishiyog.shop.ProductDescription;
 import com.example.krishiyog.databinding.CardviewProductBinding;
 import com.example.krishiyog.models.ProductModel;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,10 +85,11 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             if (productModel.getImageUrls() != null && !productModel.getImageUrls().isEmpty()) {
                 String firstImageUrl = productModel.getImageUrls().get(0);
-                Glide.with(itemView.getContext())
-                        .load(firstImageUrl)
-                        .placeholder(R.drawable.pesticide)
-                        .into(binding.productImage);
+//                Glide.with(itemView.getContext())
+//                        .load(firstImageUrl)
+//                        .placeholder(R.drawable.pesticide)
+//                        .into(binding.productImage);
+                Picasso.get().load(firstImageUrl).into(binding.productImage);
             } else {
                 binding.productImage.setImageResource(R.drawable.pesticide);
             }
@@ -130,9 +132,10 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             // Check if imageUrl is null before accessing it
             if (productModel.getImageUrls() != null && !productModel.getImageUrls().isEmpty()) {
                 String firstImageUrl = productModel.getImageUrls().get(0);
-                Glide.with(itemView.getContext())
-                        .load(firstImageUrl)
-                        .into(binding.image);
+//                Glide.with(itemView.getContext())
+//                        .load(firstImageUrl)
+//                        .into(binding.image);
+                Picasso.get().load(firstImageUrl).into(binding.image);
             } else {
                 // Optionally set a placeholder image or hide the image view
                 binding.image.setImageResource(com.denzcoskun.imageslider.R.drawable.default_placeholder); // Add a placeholder image

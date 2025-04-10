@@ -1,5 +1,7 @@
 package com.example.krishiyog.adapters;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.transition.ChangeTransform;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,13 +39,25 @@ public class ChatBotAdapter extends RecyclerView.Adapter<ChatBotAdapter.ViewHold
         if (chatBotModel.isUser()){
             holder.binding.userMessage.setVisibility(View.VISIBLE);
             holder.binding.botMessage.setVisibility(View.GONE);
+            holder.binding.typingDots.setVisibility(View.GONE);
             holder.binding.userMessage.setText(chatBotModel.getMessage());
         }
         else {
-            holder.binding.botMessage.setVisibility(View.VISIBLE);
-            holder.binding.userMessage.setVisibility(View.GONE);
-            holder.binding.botMessage.setText(chatBotModel.getMessage());
-
+//            holder.binding.botMessage.setVisibility(View.VISIBLE);
+//            holder.binding.userMessage.setVisibility(View.GONE);
+//            holder.binding.botMessage.setText(chatBotModel.getMessage());
+            String message = chatBotModel.getMessage();
+            if (message.equals("...")) {
+                holder.binding.userMessage.setVisibility(View.GONE);
+                holder.binding.botMessage.setVisibility(View.GONE);
+                holder.binding.typingDots.setVisibility(View.VISIBLE);
+                animateTypingDots(holder.binding.typingDots);
+            } else {
+                holder.binding.userMessage.setVisibility(View.GONE);
+                holder.binding.typingDots.setVisibility(View.GONE);
+                holder.binding.botMessage.setVisibility(View.VISIBLE);
+                holder.binding.botMessage.setText(message);
+            }
         }
     }
 
@@ -60,5 +74,20 @@ public class ChatBotAdapter extends RecyclerView.Adapter<ChatBotAdapter.ViewHold
             super(binding.getRoot());
             this.binding = binding;
         }
+    }
+    // Animate typing dots
+    private void animateTypingDots(final android.widget.TextView typingDots) {
+        final Handler handler = new Handler(Looper.getMainLooper());
+        final String[] dots = {".", "..", "..."};
+        final int[] index = {0};
+
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                typingDots.setText(dots[index[0]]);
+                index[0] = (index[0] + 1) % dots.length;
+                handler.postDelayed(this, 500); // repeat every 500ms
+            }
+        });
     }
 }

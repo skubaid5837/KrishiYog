@@ -26,6 +26,8 @@ import com.example.krishiyog.models.OrderModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.razorpay.Checkout;
+import com.razorpay.PaymentResultListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,7 +37,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-public class CheckoutActivity extends AppCompatActivity {
+public class CheckoutActivity extends AppCompatActivity implements PaymentResultListener {
 
     ActivityCheckoutBinding binding;
     FirebaseFirestore db;
@@ -81,7 +83,7 @@ public class CheckoutActivity extends AppCompatActivity {
 
         //Placed Order
         binding.btnProceedToCheckout.setOnClickListener(view -> {
-            placeOrder();
+            startPayment();
         });
 
         //Edit address
@@ -90,6 +92,41 @@ public class CheckoutActivity extends AppCompatActivity {
         });
 
     }
+
+    @Override
+    public void onPaymentSuccess(String razorpayPaymentID) {
+        Toast.makeText(this, "Payment Successful: " + razorpayPaymentID, Toast.LENGTH_SHORT).show();
+        placeOrder(); // Now place the order only after successful payment
+    }
+
+    @Override
+    public void onPaymentError(int code, String response) {
+        Toast.makeText(this, "Payment failed", Toast.LENGTH_SHORT).show();
+    }
+
+
+    private void startPayment() {
+        Checkout checkout = new Checkout();
+        checkout.setKeyID("rzp_test_9DNOnSzxhfFzjv"); // Replace with your Razorpay API Key
+
+        double amount = i.getDoubleExtra("finalMrp", 0.0); // Amount in rupees
+        int amountInPaise = (int) (amount * 100); // Razorpay accepts amount in paise
+
+        try {
+            org.json.JSONObject options = new org.json.JSONObject();
+            options.put("name", "Krishi Yog");
+            options.put("description", "Order Payment");
+            options.put("currency", "INR");
+            options.put("amount", amountInPaise); // amount in paise
+            options.put("prefill.email", mAuth.getCurrentUser().getEmail());
+            options.put("prefill.contact", ""); // You can fetch user phone if available
+
+            checkout.open(CheckoutActivity.this, options);
+        } catch (Exception e) {
+            Toast.makeText(this, "Payment Failed", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
     private void placeOrder() {
         // Fetch cart items from Firebase

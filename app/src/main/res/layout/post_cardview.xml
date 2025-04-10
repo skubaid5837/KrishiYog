@@ -54,15 +54,6 @@
                     android:textSize="12sp" />
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/translate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="translate"
-                android:paddingHorizontal="4dp"
-                android:layout_marginBottom="10dp"
-                android:textColor="@color/secondaryBlack"
-                android:gravity="end" />
 
         </LinearLayout>
 

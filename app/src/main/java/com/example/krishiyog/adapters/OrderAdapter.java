@@ -13,6 +13,7 @@ import com.example.krishiyog.databinding.OrderedItemBinding;
 import com.example.krishiyog.models.OrderModel;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -79,9 +80,10 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
                             List<String> imageUrls = (List<String>) documentSnapshot.get("imageUrls");
                             String imageUrl = (imageUrls != null && !imageUrls.isEmpty()) ? imageUrls.get(0) : null;
 
-                            Glide.with(itemView.getContext())
-                                    .load(imageUrl)
-                                    .into(binding.productImage);
+//                            Glide.with(itemView.getContext())
+//                                    .load(imageUrl)
+//                                    .into(binding.productImage);
+                            Picasso.get().load(imageUrl).into(binding.productImage);
 
                             String totalPrice = String.valueOf(productPrice * productQuantity);
                             binding.productName.setText(productName);

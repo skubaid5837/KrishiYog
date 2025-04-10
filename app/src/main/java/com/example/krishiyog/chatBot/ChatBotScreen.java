@@ -1,6 +1,7 @@
 package com.example.krishiyog.chatBot;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -45,9 +46,8 @@ public class ChatBotScreen extends AppCompatActivity {
     private ArrayList<ChatBotModel> chatBotModelArrayList;
     private ChatBotAdapter chatBotAdapter;
     private boolean isKeyboardVisible = false;
-
-    private static final String OPENAI_API_KEY = "";
-    private static final String OPENAI_API_URL = "https://api.openai.com/v1/chat/completions";
+    public static final String OPENAI_API_KEY = "sk-proj-DUaFlD_KI7ypA3-pyyucyhm5l2-h-ryKe5S_UyZ2PzgLt8CL4DU4hQ-RlJRHi9jDry2E_GwAgVT3BlbkFJVyC6ob9yvoIWHo-tu3g1xh7fAUvvLmdYbLfVwz3sUeRourgDc3s4QJVDYfHzFHO-AZMIYJTSnSyXYA";
+    public static final String OPENAI_API_URL = "https://api.openai.com/v1/chat/completions";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +61,10 @@ public class ChatBotScreen extends AppCompatActivity {
             return insets;
         });
 
+        binding.backBtn.setOnClickListener(view -> {
+            onBackPressed();
+        });
+
         // Setup keyboard visibility listener
         setupKeyboardVisibilityListener();
 
@@ -72,7 +76,17 @@ public class ChatBotScreen extends AppCompatActivity {
 
         binding.chatRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         binding.chatRecyclerView.setAdapter(chatBotAdapter);
+        Intent i = getIntent();
+        String disease = i.getStringExtra("disease");
+        String isTrue = "0";
+        isTrue = i.getStringExtra("isTrue");
+        String prompt = "Explain the disease " +disease+" in a simple and detailed manner. Describe its symptoms, causes, and how it affects plants. Also, provide easy-to-follow solutions and preventive measures for farmers. Use simple language so that even a beginner in farming can understand.";
 
+        if (isTrue!=null){
+            if (isTrue.equals("1")){
+                binding.message.setText(prompt);
+            }
+        }
         // Move click listener setup to separate method
         setupSendButton();
 
@@ -221,6 +235,7 @@ public class ChatBotScreen extends AppCompatActivity {
     }
 
     private void fetchChatBotResponse(String userMessage) {
+        addMessageToChat("...", false);
         // Prepare JSON body for the OpenAI API request
         JSONObject jsonBody = new JSONObject();
         try {
@@ -248,8 +263,11 @@ public class ChatBotScreen extends AppCompatActivity {
                             JSONArray choices = response.getJSONArray("choices");
                             JSONObject choice = choices.getJSONObject(0);
                             String botReply = choice.getJSONObject("message").getString("content");
-                            // Toast.makeText(ChatBotScreen.this, botReply, Toast.LENGTH_SHORT).show();
-                            // Add chatbot response to RecyclerView
+                            // 🔥 Remove typing indicator (last item)
+                            chatBotModelArrayList.remove(chatBotModelArrayList.size() - 1);
+                            chatBotAdapter.notifyItemRemoved(chatBotModelArrayList.size());
+
+                            // ✅ Add actual chatbot reply
                             addMessageToChat(botReply, false);
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -260,6 +278,10 @@ public class ChatBotScreen extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        // 🔥 Remove typing indicator on error too
+                        chatBotModelArrayList.remove(chatBotModelArrayList.size() - 1);
+                        chatBotAdapter.notifyItemRemoved(chatBotModelArrayList.size());
+
                         if (error.networkResponse != null) {
                             String errorMessage = new String(error.networkResponse.data);
                             Toast.makeText(ChatBotScreen.this, "Error: " + errorMessage, Toast.LENGTH_SHORT).show();

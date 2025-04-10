@@ -30,7 +30,8 @@
                 android:id="@+id/profile_image"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:background="@drawable/img_circular"
+                android:scaleType="centerCrop"
+                app:shapeAppearanceOverlay="@style/CircleImageView"
                 android:src="@drawable/ic_profile" />
 
             <!-- Profile Info -->
@@ -283,6 +284,18 @@
             android:background="@drawable/btn_logout"
             android:textColor="@color/primary"
             android:fontFamily="sans-serif-medium" />
+
+        <ProgressBar
+            android:id="@+id/imageProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Large"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

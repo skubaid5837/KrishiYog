@@ -11,6 +11,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.bumptech.glide.Glide;
 import com.example.krishiyog.R;
 import com.example.krishiyog.databinding.ActivityImagePreviewBinding;
+import com.squareup.picasso.Picasso;
 
 public class ImagePreviewActivity extends AppCompatActivity {
 
@@ -30,9 +31,10 @@ public class ImagePreviewActivity extends AppCompatActivity {
 
         String imageUrl = getIntent().getStringExtra("imageUrl");
 
-        Glide.with(this)
-                .load(imageUrl)
-                .into(binding.fullScreenImage);
+//        Glide.with(this)
+//                .load(imageUrl)
+//                .into(binding.fullScreenImage);
+        Picasso.get().load(imageUrl).into(binding.fullScreenImage);
 
         binding.backBtn.setOnClickListener(view -> {
             onBackPressed();

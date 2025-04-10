@@ -59,6 +59,9 @@ public class OrderScreen extends AppCompatActivity {
         binding.btnDelivered.setOnClickListener(view -> { onButtonClicked(binding.btnDelivered);});
         binding.btnCancelled.setOnClickListener(view -> { onButtonClicked(binding.btnCancelled);});
         binding.btnOngoing.setOnClickListener(view -> { onButtonClicked(binding.btnOngoing);});
+        binding.btnBack.setOnClickListener(view -> {
+            onBackPressed();
+        });
     }
 
     private void itemRecyclerView() {
