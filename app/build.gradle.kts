@@ -21,6 +21,7 @@ android {
         viewBinding = true
     }
 
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -50,6 +51,8 @@ dependencies {
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
     implementation("com.github.denzcoskun:ImageSlideshow:0.1.2")
+    implementation("com.github.bumptech.glide:glide:4.13.2")
+    implementation("androidx.viewpager2:viewpager2:1.0.0")
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

@@ -18,11 +18,13 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class LoginScreen extends AppCompatActivity {
 
-    ActivityLoginScreenBinding binding;
-    FirebaseAuth mAuth;
+    private ActivityLoginScreenBinding binding;
+    private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,9 +39,17 @@ public class LoginScreen extends AppCompatActivity {
         });
 
         mAuth = FirebaseManager.getInstance().getAuth();
+        db = FirebaseFirestore.getInstance();
 
         binding.loginBtn.setOnClickListener(view -> login());
 
+        binding.signUpBtn.setOnClickListener(view -> signUp());
+
+    }
+
+    private void signUp() {
+        Intent intent = new Intent(this, SignupScreen.class);
+        startActivity(intent);
     }
 
     private void login() {

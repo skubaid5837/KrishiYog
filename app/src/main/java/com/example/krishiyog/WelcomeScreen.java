@@ -11,10 +11,12 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.krishiyog.databinding.ActivityWelcomeScreenBinding;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class WelcomeScreen extends AppCompatActivity {
 
     ActivityWelcomeScreenBinding binding;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,12 +30,25 @@ public class WelcomeScreen extends AppCompatActivity {
             return insets;
         });
 
+        mAuth = FirebaseAuth.getInstance();
+
+        // Check if the user is logged in
+        checkLoginStatus();
+
         //SignUp Btn
         binding.signBtn.setOnClickListener(view -> changeActivity(new Intent(WelcomeScreen.this, SignupScreen.class)));
 
         //Login Btn
         binding.loginBtn.setOnClickListener(view -> changeActivity(new Intent(WelcomeScreen.this, LoginScreen.class)));
 
+    }
+
+    private void checkLoginStatus() {
+        if (mAuth.getCurrentUser() != null) {
+            // User is signed in
+            changeActivity(new Intent(WelcomeScreen.this, HomeScreen.class));
+            finish(); // Close WelcomeScreen activity
+        }
     }
 
     //Method to change activity

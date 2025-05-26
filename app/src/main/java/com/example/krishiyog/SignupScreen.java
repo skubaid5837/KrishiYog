@@ -17,6 +17,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.krishiyog.databinding.ActivitySignupScreenBinding;
+import com.example.krishiyog.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Firebase;
@@ -75,11 +76,11 @@ public class SignupScreen extends AppCompatActivity {
         }
 
         //creating user in firebase
-        createAccountUsingFirebase(email, password, phoneNo);
+        createAccountUsingFirebase("name", email, password, phoneNo);
     }
 
     //Method to create a user in firebase
-    private void createAccountUsingFirebase(String email, String password, String phoneNo) {
+    private void createAccountUsingFirebase(String name, String email, String password, String phoneNumber) {
 
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -89,13 +90,17 @@ public class SignupScreen extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Account Created", Toast.LENGTH_SHORT).show();
                     FirebaseUser currentUser = mAuth.getCurrentUser();
                     if (currentUser != null) {
-                        storeUsersDetail(currentUser, phoneNo, email);
+                        // Get the user ID
+                        String userId = currentUser.getUid();
+                        // Create the User object with provided details
+                        User user = new User(userId, name, email, phoneNumber, "", false, null); // profilePhotoUrl is empty for now
+                        storeUsersDetail(user);
 
                         // Create an Intent to start the new activity
                         Intent intent = new Intent(SignupScreen.this, HomeScreen.class);
                         // Optionally pass user data with the intent
                         intent.putExtra("userEmail", email);
-                        intent.putExtra("userPhone", phoneNo);
+                        intent.putExtra("userPhone", phoneNumber);
                         // Start the new activity
                         startActivity(intent);
                         // Optionally, finish the current activity
@@ -110,24 +115,12 @@ public class SignupScreen extends AppCompatActivity {
     }
 
     //Method to store the user detail in Database
-    private void storeUsersDetail(FirebaseUser currentUser, String phoneNo, String email) {
-        String uid = currentUser.getUid();
-
-        Map<String, Object> userMap = new HashMap<>();
-        userMap.put("name", "");
-        userMap.put("email", email);
-        userMap.put("phoneNo", phoneNo);
-        userMap.put("uniqueId", uid);
-
-        db.collection("users").document(uid)
-                .set(userMap)
-                .addOnSuccessListener(aVoid -> {
-                    // Document was successfully written
-                    Toast.makeText(SignupScreen.this, "User details stored successfully", Toast.LENGTH_SHORT).show();
-                })
-                .addOnFailureListener(e -> {
-                    // Handle the error
-                    Toast.makeText(SignupScreen.this, "Failed to store user details: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+    private void storeUsersDetail(User user) {
+        db.collection("users")
+                .document(user.getUserId())
+                .set(user)
+                .addOnFailureListener(aVoid ->{
+                    Toast.makeText(this, "Something went wrong, please try again", Toast.LENGTH_SHORT).show();
                 });
     }
 
